@@ -1,0 +1,19 @@
+@layer components {
+  .modal {
+    @apply fixed w-screen h-screen bg-transparent transition-all py-4 px-2 flex items-center justify-center
+    backdrop-blur-[0px];
+  }
+
+  .modal.open {
+    @apply bg-blue-500/50 backdrop-blur-[2px];
+  }
+
+  .modal-content {
+    @apply bg-white p-4 max-mobile:p-2 rounded-lg shadow-lg shadow-black/15 w-full border-1 border-gray-200
+    relative top-[50px] opacity-0 transition-all max-w-fit;
+  }
+
+  .modal.open > .modal-content {
+    @apply top-[0] opacity-100;
+  }
+}

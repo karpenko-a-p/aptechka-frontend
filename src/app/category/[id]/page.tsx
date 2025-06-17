@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { categoryRepository } from 'application/abstractions/repositories';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Select } from 'presentation/ui/components/Select/Select';
 
 const { getCategoryById } = categoryRepository();
 
@@ -34,7 +33,6 @@ export default async function Page({ params, searchParams }: Props) {
       <Link className="mt-1 mb-4" href="/">
         На главную
       </Link>
-
 
       <div className="flex grow gap-2">
         <div className="flex-1 rounded-lg border-2 border-gray-200 p-2">
