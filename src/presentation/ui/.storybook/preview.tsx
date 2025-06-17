@@ -1,6 +1,11 @@
 import type { Preview } from '@storybook/react';
-import { inter } from 'presentation/ui/fonts';
 import 'presentation/ui/variables/tailwindcss.css';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
 
 const preview: Preview = {
   tags: ['autodocs'],

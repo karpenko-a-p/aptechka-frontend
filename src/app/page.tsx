@@ -22,9 +22,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/**
- * Выбор города
- */
 export default async function Page() {
   const [categories, discount, news] = await Promise.all([getCategories(), getNewUsersDiscount(), getNews()]);
 

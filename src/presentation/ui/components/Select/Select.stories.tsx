@@ -12,19 +12,20 @@ export default meta;
 
 export const SelectStory: Story = {
   args: {
+    label: 'Select',
     children: (
       <>
         <option value="1">Value 1</option>
         <option value="2">Value 2</option>
         <option value="3">Value 3</option>
       </>
-    ),
+    ) as unknown as React.ReactElement<HTMLOptionElement>[],
   },
 };
 
 export const Disabled: Story = {
   render: () => (
-    <Select disabled={true}>
+    <Select disabled label="Select">
       <option value="1">Value 1</option>
       <option value="2">Value 2</option>
       <option value="3">Value 3</option>
@@ -34,7 +35,8 @@ export const Disabled: Story = {
 
 export const Placeholder: Story = {
   render: () => (
-    <Select placeholder="Select something">
+    <Select label="Select">
+      <option hidden selected>Select something</option>
       <option value="1">Value 1</option>
       <option value="2">Value 2</option>
       <option value="3">Value 3</option>
@@ -44,7 +46,8 @@ export const Placeholder: Story = {
 
 export const PlaceholderDisabled: Story = {
   render: () => (
-    <Select placeholder="Select something" disabled={true}>
+    <Select disabled label="Select">
+      <option hidden selected>Select something</option>
       <option value="1">Value 1</option>
       <option value="2">Value 2</option>
       <option value="3">Value 3</option>
@@ -54,7 +57,7 @@ export const PlaceholderDisabled: Story = {
 
 export const Error: Story = {
   render: () => (
-    <Select hasError={true} errorMessage="Something went wrong">
+    <Select invalid label="Select" errorMessage="Something went wrong">
       <option value="1">Value 1</option>
       <option value="2">Value 2</option>
       <option value="3">Value 3</option>
@@ -64,7 +67,7 @@ export const Error: Story = {
 
 export const ErrorDisabled: Story = {
   render: () => (
-    <Select hasError={true} errorMessage="Something went wrong" disabled={true}>
+    <Select invalid errorMessage="Something went wrong" disabled label="Select">
       <option value="1">Value 1</option>
       <option value="2">Value 2</option>
       <option value="3">Value 3</option>
@@ -74,7 +77,7 @@ export const ErrorDisabled: Story = {
 
 export const Description: Story = {
   render: () => (
-    <Select description="Select most interest">
+    <Select description="Select most interest" label="Select">
       <option value="1">Value 1</option>
       <option value="2">Value 2</option>
       <option value="3">Value 3</option>
@@ -87,47 +90,15 @@ export const AllElements: Story = {
     <Select
       placeholder="Select something"
       description="Select most interest"
-      hasError={true}
+      invalid
       errorMessage="Something went wrong"
-      disabled={true}
+      disabled
       label="Ineristings"
-      star={true}
+      required
     >
       <option value="1">Value 1</option>
       <option value="2">Value 2</option>
       <option value="3">Value 3</option>
     </Select>
-  ),
-};
-
-export const SizesStory: Story = {
-  render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-      <Select size="xs">
-        <option value="1">Value 1</option>
-        <option value="2">Value 2</option>
-        <option value="3">Value 3</option>
-      </Select>
-      <Select size="sm">
-        <option value="1">Value 1</option>
-        <option value="2">Value 2</option>
-        <option value="3">Value 3</option>
-      </Select>
-      <Select size="md">
-        <option value="1">Value 1</option>
-        <option value="2">Value 2</option>
-        <option value="3">Value 3</option>
-      </Select>
-      <Select size="lg">
-        <option value="1">Value 1</option>
-        <option value="2">Value 2</option>
-        <option value="3">Value 3</option>
-      </Select>
-      <Select size="xl">
-        <option value="1">Value 1</option>
-        <option value="2">Value 2</option>
-        <option value="3">Value 3</option>
-      </Select>
-    </div>
   ),
 };

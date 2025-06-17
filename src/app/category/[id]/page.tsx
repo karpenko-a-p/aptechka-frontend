@@ -35,48 +35,6 @@ export default async function Page({ params, searchParams }: Props) {
         На главную
       </Link>
 
-      <div className="flex flex-col gap-2 mb-4">
-        <Select label="Selectik">
-          <option value="1">option 1</option>
-          <option value="2">option 2</option>
-          <option value="3">option 3</option>
-        </Select>
-
-
-        <Select label="Selectik placeholder">
-          <option selected hidden>placeholderrrr</option>
-          <option value="1">option 1</option>
-          <option value="2">option 2</option>
-          <option value="3">option 3</option>
-        </Select>
-
-
-        <Select label="Selectik 2" placeholder="placeholderr" required>
-          <option value="1">option 1</option>
-          <option value="2">option 2</option>
-          <option value="3">option 3</option>
-        </Select>
-
-
-        <Select label="Selectik 2" placeholder="placeholderr" required disabled>
-          <option value="1">option 1</option>
-          <option value="2">option 2</option>
-          <option value="3">option 3</option>
-        </Select>
-
-
-        <Select label="Selectik 2" placeholder="placeholderr" invalid errorMessage="Error" description="Desc">
-          <option value="1">option 1</option>
-          <option value="2">option 2</option>
-          <option value="3">option 3</option>
-        </Select>
-
-        <Select label="Selectik 2" placeholder="placeholderr" disabled required invalid errorMessage="Error" description="Desc">
-          <option value="1">option 1</option>
-          <option value="2">option 2</option>
-          <option value="3">option 3</option>
-        </Select>
-      </div>
 
       <div className="flex grow gap-2">
         <div className="flex-1 rounded-lg border-2 border-gray-200 p-2">

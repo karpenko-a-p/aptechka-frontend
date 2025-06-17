@@ -4,6 +4,6 @@
   }
 
   .progress-bar {
-    @apply absolute top-0 left-0 h-full rounded-lg bg-blue-500;
+    @apply absolute top-0 left-0 h-full rounded-lg bg-blue-500 transition-all;
   }
 }
