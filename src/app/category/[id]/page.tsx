@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { categoryRepository } from 'application/abstractions/repositories';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Input } from 'presentation/ui/components/Input/Input';
+import { Select } from 'presentation/ui/components/Select/Select';
 
 const { getCategoryById } = categoryRepository();
 
@@ -36,13 +36,46 @@ export default async function Page({ params, searchParams }: Props) {
       </Link>
 
       <div className="flex flex-col gap-2 mb-4">
-        <Input label="Lorem ipsum strong sit amet" placeholder="Placeholder" />
-        <Input label="Lorem ipsum strong sit amet" required />
-        <Input label="Lorem ipsum strong sit amet" type="password" />
-        <Input label="Lorem ipsum strong sit amet" type="number" />
-        <Input label="Lorem ipsum strong sit amet" disabled />
-        <Input label="Lorem ipsum strong sit amet" disabled invalid errorMessage="I am invalid" />
-        <Input label="Lorem ipsum strong sit amet" invalid errorMessage="I am invalid" description="I am description" />
+        <Select label="Selectik">
+          <option value="1">option 1</option>
+          <option value="2">option 2</option>
+          <option value="3">option 3</option>
+        </Select>
+
+
+        <Select label="Selectik placeholder">
+          <option selected hidden>placeholderrrr</option>
+          <option value="1">option 1</option>
+          <option value="2">option 2</option>
+          <option value="3">option 3</option>
+        </Select>
+
+
+        <Select label="Selectik 2" placeholder="placeholderr" required>
+          <option value="1">option 1</option>
+          <option value="2">option 2</option>
+          <option value="3">option 3</option>
+        </Select>
+
+
+        <Select label="Selectik 2" placeholder="placeholderr" required disabled>
+          <option value="1">option 1</option>
+          <option value="2">option 2</option>
+          <option value="3">option 3</option>
+        </Select>
+
+
+        <Select label="Selectik 2" placeholder="placeholderr" invalid errorMessage="Error" description="Desc">
+          <option value="1">option 1</option>
+          <option value="2">option 2</option>
+          <option value="3">option 3</option>
+        </Select>
+
+        <Select label="Selectik 2" placeholder="placeholderr" disabled required invalid errorMessage="Error" description="Desc">
+          <option value="1">option 1</option>
+          <option value="2">option 2</option>
+          <option value="3">option 3</option>
+        </Select>
       </div>
 
       <div className="flex grow gap-2">

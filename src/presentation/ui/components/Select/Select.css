@@ -1,0 +1,41 @@
+@layer components {
+  .select {
+    @apply flex flex-col;
+  }
+
+  .select > label {
+    @apply flex items-center relative;
+  }
+
+  .select > label > span {
+    @apply text-black text-xs absolute left-2 top-3 -translate-y-[50%] z-1 border-l-1
+    border-transparent truncate max-w-[calc(100%-2rem)] pointer-events-none;
+  }
+
+  .select > label:has(:required) > span {
+    @apply after:content-['*'] after:ml-0.5 after:text-red-500;
+  }
+
+  .select select {
+    @apply border-1 border-solid border-gray-200 rounded-lg px-2 pb-1.5 pt-5 pr-5 transition-all font-[400]
+    hover:border-blue-600 focus:border-blue-500 focus:outline focus:outline-blue-500
+    disabled:border-gray-200 disabled:bg-gray-200 grow appearance-none truncate max-w-full
+    not-disabled:not-focus:aria-[invalid="true"]:border-red-500;
+  }
+
+  .select > label:has(:disabled) {
+    @apply select-none cursor-not-allowed pointer-events-none;
+  }
+
+  .select > label > svg {
+    @apply absolute top-[50%] -translate-y-[50%] right-1 pointer-events-none;
+  }
+
+  .select-description {
+    @apply text-xs text-gray-400 mt-0.5;
+  }
+
+  .select-error {
+    @apply text-xs text-red-500 mt-0.5;
+  }
+}

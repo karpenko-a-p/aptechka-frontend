@@ -7,7 +7,7 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   /**
    * Лэйбл
    */
-  label?: string;
+  label: string;
   /**
    * Тип инпута
    */
@@ -36,7 +36,7 @@ export const Input: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>((p
     <div className={cn(className, 'input')}>
       <label>
         {/*Лэйбл*/}
-        {label && <span>{label}</span>}
+        <span>{label}</span>
 
         {/*Инпут*/}
         <input type={type} ref={ref} aria-invalid={invalid} {...restProps} />

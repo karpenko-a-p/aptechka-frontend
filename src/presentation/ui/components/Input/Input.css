@@ -8,8 +8,8 @@
   }
 
   .input > label > span {
-    @apply text-black text-xs data-[star="true"]:after:content-['*'] data-[star="true"]:after:text-red-500
-    absolute left-2 top-3 -translate-y-[50%] z-1 border-l-1 border-transparent truncate max-w-[calc(100%-1rem)];
+    @apply text-black text-xs absolute left-2 top-3 -translate-y-[50%] z-1 border-l-1
+    border-transparent truncate max-w-[calc(100%-1rem)];
   }
 
   .input > label:has(:required) > span:after {
