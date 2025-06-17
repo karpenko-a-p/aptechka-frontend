@@ -1,0 +1,7 @@
+@layer components {
+  .link, a {
+    @apply inline-block w-fit hover:underline active:underline transition ease-in-out text-blue-500
+    focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-2 focus-visible:outline-solid
+    focus-visible:outline-blue-500 rounded-sm text-base max-mobile:text-sm;
+  }
+}

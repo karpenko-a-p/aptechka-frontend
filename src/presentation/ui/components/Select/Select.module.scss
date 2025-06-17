@@ -1,0 +1,183 @@
+@use "../../variables/spaces";
+@use "../../variables/borders";
+@use "../../variables/colors";
+@use "../../variables/texts";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+
+  & > .label {
+    margin-bottom: spaces.$xxxxs;
+
+    &[data-start="true"]:after {
+      content: '*';
+      color: colors.$text_error;
+      margin-left: spaces.$xxxxs;
+    }
+  }
+}
+
+.select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid colors.$secondary;
+  border-radius: borders.$sm;
+  overflow: hidden;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    border-color: colors.$primary_hover;
+  }
+
+  &:has(select:focus) {
+    border-color: colors.$primary;
+  }
+
+  // Ошибка
+  &[data-hasError="true"] {
+    border-color: colors.$error;
+  }
+
+  // Выключено
+  &[data-disabled="true"] {
+    background-color: colors.$gray_3;
+    border-color: colors.$gray_3;
+
+    & > .icon > svg {
+      color: colors.$text_dark_disabled;
+    }
+  }
+
+
+  // Иконка открытия
+  & > .icon {
+    position: absolute;
+    top: 0;
+    right: spaces.$xxxs;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    border-radius: borders.$sm;
+
+    & > svg {
+      color: colors.$text_dark;
+    }
+  }
+
+  // Селект
+  & > select {
+    background-color: colors.$white;
+    font-weight: 400;
+    overflow: hidden;
+    padding: spaces.$xxxs 0 spaces.$xxxs spaces.$xxxs;
+    flex: 0 0 100%;
+    appearance: none;
+    cursor: pointer;
+    color: colors.$text_dark;
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: colors.$text_placeholder;
+    }
+
+    &[data-placeholder="true"] {
+      color: colors.$text_placeholder;
+    }
+
+    & > option {
+      color: colors.$text_dark;
+      cursor: pointer;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      user-select: none;
+      color: colors.$text_dark_disabled;
+      background-color: colors.$gray_3;
+      border-color: colors.$gray_3;
+    }
+  }
+
+  // Размер
+  &[data-size="xs"] {
+    & svg {
+      width: texts.$lh_xs;
+      height: texts.$lh_xs;
+    }
+
+    & select {
+      @include texts.font_xs;
+      padding-right: calc(#{spaces.$xxxs} * 2 + #{texts.$lh_xs});
+    }
+  }
+
+  &[data-size="sm"] {
+    & svg {
+      width: texts.$lh_sm;
+      height: texts.$lh_sm;
+    }
+
+    & select {
+      @include texts.font_sm;
+      padding-right: calc(#{spaces.$xxxs} * 2 + #{texts.$lh_sm});
+    }
+  }
+
+  &[data-size="md"] {
+    & svg {
+      width: texts.$lh_md;
+      height: texts.$lh_md;
+    }
+
+    & select {
+      @include texts.font_md;
+      padding-right: calc(#{spaces.$xxxs} * 2 + #{texts.$lh_md});
+    }
+  }
+
+  &[data-size="lg"] {
+    & svg {
+      width: texts.$lh_lg;
+      height: texts.$lh_lg;
+    }
+
+    & select {
+      @include texts.font_lg;
+      padding-right: calc(#{spaces.$xxxs} * 2 + #{texts.$lh_lg});
+    }
+  }
+
+  &[data-size="xl"] {
+    & svg {
+      width: texts.$lh_xl;
+      height: texts.$lh_xl;
+    }
+
+    & select {
+      @include texts.font_xl;
+      padding-right: calc(#{spaces.$xxxs} * 2 + #{texts.$lh_xl});
+    }
+  }
+}
+
+// Описание
+.description {
+  margin-top: spaces.$xxxxs;
+}
+
+// Ошибка
+.error {
+  margin-top: spaces.$xxxxs;
+  transition: none;
+}
+
+.description + .error {
+  margin-top: 0;
+}

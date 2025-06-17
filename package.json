@@ -1,0 +1,53 @@
+{
+  "name": "aptechka-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:turbo": "next dev --turbopack",
+    "dev": "next dev -H 0.0.0.0",
+    "storybook": "storybook dev -c ./src/presentation/ui/.storybook -p 4444",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tabler/icons-react": "3.34.0",
+    "client-only": "0.0.1",
+    "clsx": "2.1.1",
+    "lodash": "4.17.21",
+    "mobx": "6.13.5",
+    "mobx-react-lite": "4.0.7",
+    "next": "15.3.3",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "reflect-metadata": "0.2.2",
+    "server-only": "0.0.1",
+    "typedi": "0.10.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "8.4.7",
+    "@storybook/nextjs": "8.4.7",
+    "@tailwindcss/postcss": "4.1.8",
+    "@types/lodash": "4.17.13",
+    "@types/node": "22.13.1",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@typescript-eslint/eslint-plugin": "8.15.0",
+    "@typescript-eslint/parser": "8.15.0",
+    "ajv": "8.17.1",
+    "autoprefixer": "10.4.20",
+    "cssnano": "7.0.6",
+    "eslint": "8.57.1",
+    "eslint-config-next": "15.0.3",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.2.1",
+    "eslint-plugin-react": "7.37.2",
+    "eslint-plugin-react-hooks": "5.0.0",
+    "postcss": "8.5.2",
+    "prettier": "3.3.3",
+    "sass": "1.89.1",
+    "storybook": "8.4.7",
+    "tailwindcss": "4.1.8",
+    "typescript": "5.7.3"
+  }
+}

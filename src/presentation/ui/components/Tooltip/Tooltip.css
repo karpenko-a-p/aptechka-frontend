@@ -1,0 +1,6 @@
+@layer components {
+  .tooltip {
+    @apply fixed inline-flex items-center justify-center z-1010 transition p-1 -translate-y-[15px] opacity-0
+    data-[open="true"]:-translate-y-[0px] data-[open="true"]:opacity-100;
+  }
+}

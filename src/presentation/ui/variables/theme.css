@@ -1,0 +1,5 @@
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-mobile: 575px;
+  --breakpoint-tablet: 1200px;
+}

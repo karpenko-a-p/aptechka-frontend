@@ -1,0 +1,5 @@
+@layer components {
+  .paper {
+    @apply shadow-md rounded-md p-4 max-mobile:p-2 bg-white;
+  }
+}

@@ -1,0 +1,57 @@
+@layer components {
+  .checkbox {
+    @apply flex flex-col;
+  }
+
+  .checkbox > label {
+    @apply flex items-start cursor-pointer select-none text-sm text-black;
+  }
+
+  .checkbox input[type="checkbox"] {
+    @apply hidden;
+  }
+
+  .checkbox-rect {
+    @apply border-1 border-solid border-gray-200 rounded-md mr-2 transition-all overflow-hidden shadow-md
+    shadow-transparent h-[20px] w-[20px];
+  }
+
+  .checkbox-icon {
+    @apply transition-all w-full h-full relative top-[50%] opacity-0 text-white;
+  }
+
+  .checkbox-error {
+    @apply text-xs text-red-500 ml-[28px];
+  }
+
+  /*Состояние активности*/
+  .checkbox > label:has(:checked) > .checkbox-rect {
+    @apply bg-blue-500 shadow-blue-300 border-blue-500;
+  }
+
+  .checkbox > label:has(:checked) .checkbox-icon {
+    @apply top-0 opacity-100;
+  }
+
+  /*Состояние ошибки*/
+  .checkbox > label:has([aria-invalid="true"]) > .checkbox-rect {
+    @apply border-red-500;
+  }
+
+  .checkbox > label:has([aria-invalid="true"]):has(:checked) .checkbox-rect {
+    @apply bg-red-500 shadow-red-200;
+  }
+
+  /*Состояние выключено*/
+  .checkbox > label:has(:disabled) {
+    @apply cursor-not-allowed;
+  }
+
+  .checkbox > label:has(:disabled) > .checkbox-rect {
+    @apply border-gray-400 shadow-none;
+  }
+
+  .checkbox > label:has(:checked):has(:disabled) .checkbox-rect {
+    @apply bg-gray-400;
+  }
+}

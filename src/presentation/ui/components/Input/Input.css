@@ -1,0 +1,37 @@
+@layer components {
+  .input {
+    @apply flex flex-col;
+  }
+
+  .input > label {
+    @apply flex flex-col relative
+  }
+
+  .input > label > span {
+    @apply text-black text-xs data-[star="true"]:after:content-['*'] data-[star="true"]:after:text-red-500
+    absolute left-2 top-3 -translate-y-[50%] z-1 border-l-1 border-transparent truncate max-w-[calc(100%-1rem)];
+  }
+
+  .input > label:has(:required) > span:after {
+    @apply content-['*'] text-red-500 ml-0.5;
+  }
+
+  .input > label:has(:disabled) {
+    @apply select-none cursor-not-allowed pointer-events-none;
+  }
+
+  .input input {
+    @apply border-1 border-solid border-gray-200 rounded-lg px-2 pb-1.5 pt-5 transition-all font-[400]
+    hover:border-blue-600 focus:border-blue-500 focus:outline focus:outline-blue-500
+    placeholder:text-gray-300 disabled:border-gray-200 disabled:bg-gray-200
+    not-disabled:not-focus:aria-[invalid="true"]:border-red-500;
+  }
+
+  .input-description {
+    @apply text-xs text-gray-400 mt-0.5;
+  }
+
+  .input-error {
+    @apply text-xs text-red-500 mt-0.5;
+  }
+}

@@ -1,0 +1,29 @@
+@layer components {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-black text-black;
+  }
+
+  h1 {
+    @apply text-3xl max-mobile:text-2xl;
+  }
+
+  h2 {
+    @apply text-2xl max-mobile:text-xl;
+  }
+
+  h3 {
+    @apply text-xl max-mobile:text-lg;
+  }
+
+  h4 {
+    @apply text-lg max-mobile:text-base
+  }
+
+  h5 {
+    @apply text-base max-mobile:text-sm;
+  }
+
+  h6 {
+    @apply text-sm;
+  }
+}

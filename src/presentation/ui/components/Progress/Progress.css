@@ -1,0 +1,9 @@
+@layer components {
+  .progress {
+    @apply rounded-lg bg-gray-200 relative h-2 overflow-hidden transition;
+  }
+
+  .progress-bar {
+    @apply absolute top-0 left-0 h-full rounded-lg bg-blue-500;
+  }
+}

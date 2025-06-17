@@ -1,0 +1,5 @@
+@layer components {
+  .container {
+    @apply px-3 max-mobile:px-2 mx-auto max-w-[1300px]! w-full;
+  }
+}

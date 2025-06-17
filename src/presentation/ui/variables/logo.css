@@ -1,0 +1,5 @@
+@layer components {
+  .logo {
+    @apply text-pink-500 inline-flex items-center select-none whitespace-nowrap;
+  }
+}
