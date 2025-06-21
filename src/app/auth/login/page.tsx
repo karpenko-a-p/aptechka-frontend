@@ -4,12 +4,14 @@ import { IconLogin2, IconEye } from '@tabler/icons-react';
 import { Input } from 'presentation/ui/components';
 import Link from 'next/link';
 import { useBoolean } from 'presentation/hooks';
-import { FormEvent, useTransition } from 'react';
+import { FormEvent, useState, useTransition } from 'react';
 import { login } from 'application/actions/login';
 import { useRouter } from 'next/navigation';
+import { isLoginSuccess, isLoginValidationError } from 'application/actions/login.constants';
 
 export default function Page() {
   const { value: showPassword, toggle } = useBoolean();
+  const [errors, setErrors] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -17,8 +19,16 @@ export default function Page() {
     event.preventDefault();
 
     startTransition(async () => {
-      await login(new FormData(event.target as HTMLFormElement));
-      router.push('/profile');
+      const loginResult = await login(new FormData(event.target as HTMLFormElement));
+
+      if (isLoginValidationError(loginResult))
+        return setErrors(loginResult.payload);
+
+      if (isLoginSuccess(loginResult)) {
+        router.push('/profile');
+      }
+
+      setErrors(['Произошла непредвиденная ошибка, попробуйте авторизоваться позже']);
     });
   };
 
@@ -42,6 +52,16 @@ export default function Page() {
             className="absolute top-[50%] right-2 -translate-y-[50%] cursor-pointer data-[show='true']:text-blue-500"
           />
         </div>
+
+        {!!errors.length && (
+          <ul className="mb-4 flex flex-col gap-2">
+            {errors.map((error) => (
+              <li key={error}>
+                <p className="before:content-['•'] before:mr-0.5 text-sm text-red-500">{error}</p>
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div className="flex gap-4 items-center">
           <button disabled={isPending}>

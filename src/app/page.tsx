@@ -1,4 +1,4 @@
-import { IconCheck, IconComet, IconThumbUp, IconMedicalCrossFilled } from '@tabler/icons-react';
+import { IconCheck, IconComet, IconThumbUp } from '@tabler/icons-react';
 import Link from 'next/link';
 import { authRepository, categoryRepository, newsRepository } from 'application/abstractions/repositories';
 import Image from 'next/image';
