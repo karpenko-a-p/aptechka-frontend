@@ -11,7 +11,7 @@ const enum Screen {
  * Брэйкпоинт
  */
 export const useScreen = () => {
-  const [breakpoint, setBreakpoint] = useState(Screen.Mobile);
+  const [breakpoint, setBreakpoint] = useState(Screen.Desktop);
 
   useEffect(() => {
     const resize = throttle(() => {
@@ -22,7 +22,7 @@ export const useScreen = () => {
         return setBreakpoint(Screen.Tablet);
 
       setBreakpoint(Screen.Desktop);
-    }, 100);
+    }, 250);
 
     document.addEventListener('resize', resize);
 

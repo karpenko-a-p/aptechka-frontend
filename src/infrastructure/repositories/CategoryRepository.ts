@@ -2,7 +2,7 @@ import { CATEGORY_REPOSITORY, ICategoryRepository } from 'application/abstractio
 import { Category } from 'application/models/Category';
 import { Service } from 'typedi';
 import { cache } from 'react';
-import { onServer } from 'application/utils/onServer';
+import 'server-only';
 
 @Service(CATEGORY_REPOSITORY)
 export class CategoryRepository implements ICategoryRepository {
@@ -42,10 +42,8 @@ export class CategoryRepository implements ICategoryRepository {
   ];
 
   constructor() {
-    onServer(() => {
-      this.getCategories = cache(this.getCategories.bind(this));
-      this.getCategoryById = cache(this.getCategoryById.bind(this));
-    });
+    this.getCategories = cache(this.getCategories.bind(this));
+    this.getCategoryById = cache(this.getCategoryById.bind(this));
   }
 
   async getCategories(): Promise<Category[]> {

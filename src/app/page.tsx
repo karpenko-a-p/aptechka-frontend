@@ -1,11 +1,14 @@
 import { IconCheck, IconComet, IconThumbUp, IconMedicalCrossFilled } from '@tabler/icons-react';
 import Link from 'next/link';
-import { categoryRepository, newsRepository } from 'application/abstractions/repositories';
+import { authRepository, categoryRepository, newsRepository } from 'application/abstractions/repositories';
 import Image from 'next/image';
 import { Metadata } from 'next';
+import { UserInformation } from 'presentation/components/UserInformation';
+import { UserLogin } from 'presentation/components/UserLogin';
 
 const { getCategories } = categoryRepository();
 const { getNewUsersDiscount, getNews } = newsRepository();
+const { getUser } = authRepository();
 
 export const revalidate = 3600;
 
@@ -23,18 +26,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const [categories, discount, news] = await Promise.all([getCategories(), getNewUsersDiscount(), getNews()]);
+  const [categories, discount, news, user] = await Promise.all([
+    getCategories(),
+    getNewUsersDiscount(),
+    getNews(),
+    getUser(),
+  ]);
 
   return (
     <div className="flex grow flex-col container mt-4">
-      <h1 className="mb-4">
-        Добро пожаловать в{' '}
-        <span className="logo">
-          <IconMedicalCrossFilled />
-          Аптечку
-          <IconMedicalCrossFilled />
-        </span>
-      </h1>
+      <div className="flex items-center mb-4 gap-10 max-mobile:gap-4 justify-between">
+        <h1 className="logo">
+          Аптечка
+        </h1>
+
+        {user ? <UserInformation user={user} /> : <UserLogin />}
+      </div>
 
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis culpa illo, minus nam non ratione! Ab

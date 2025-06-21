@@ -2,7 +2,7 @@ import { INewsRepository, NEWS_REPOSITORY } from 'application/abstractions/repos
 import { Service } from 'typedi';
 import { cache } from 'react';
 import { News } from 'application/models/News';
-import { onServer } from 'application/utils/onServer';
+import 'server-only';
 
 @Service(NEWS_REPOSITORY)
 export class NewsRepository implements INewsRepository {
@@ -28,11 +28,9 @@ export class NewsRepository implements INewsRepository {
   ];
 
   constructor() {
-    onServer(() => {
-      this.getNews = cache(this.getNews.bind(this));
-      this.getNewsById = cache(this.getNewsById.bind(this));
-      this.getNewUsersDiscount = cache(this.getNewUsersDiscount.bind(this));
-    });
+    this.getNews = cache(this.getNews.bind(this));
+    this.getNewsById = cache(this.getNewsById.bind(this));
+    this.getNewUsersDiscount = cache(this.getNewUsersDiscount.bind(this));
   }
 
   async getNews(): Promise<News[]> {
