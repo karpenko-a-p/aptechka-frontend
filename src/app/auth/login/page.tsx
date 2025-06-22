@@ -7,7 +7,7 @@ import { useBoolean } from 'presentation/hooks';
 import { FormEvent, useState, useTransition } from 'react';
 import { login } from 'application/actions/login';
 import { useRouter } from 'next/navigation';
-import { isLoginSuccess, isLoginValidationError } from 'application/actions/login.constants';
+import { isInvalidLoginOrPassword, isLoginSuccess, isLoginValidationError } from 'application/actions/login.constants';
 
 export default function Page() {
   const { value: showPassword, toggle } = useBoolean();
@@ -24,9 +24,11 @@ export default function Page() {
       if (isLoginValidationError(loginResult))
         return setErrors(loginResult.payload);
 
-      if (isLoginSuccess(loginResult)) {
+      if (isInvalidLoginOrPassword(loginResult))
+        return setErrors(['Неправильный логин или пароль']);
+
+      if (isLoginSuccess(loginResult))
         router.push('/profile');
-      }
 
       setErrors(['Произошла непредвиденная ошибка, попробуйте авторизоваться позже']);
     });

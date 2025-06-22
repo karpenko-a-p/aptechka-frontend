@@ -52,11 +52,11 @@ export class UserRepository implements IUserRepository {
     if (!rows[0])
       return null;
 
-    const newUser = new User();
-    newUser.login = rows[0].login;
-    newUser.id = rows[0].id;
+    const user = new User();
+    user.login = rows[0].login;
+    user.id = rows[0].id;
 
-    return newUser;
+    return user;
   }
 
   /**
@@ -65,5 +65,22 @@ export class UserRepository implements IUserRepository {
   async deleteUserById(id: User['id']): Promise<void> {
     const query = 'DELETE FROM users AS u WHERE u.id = $1;';
     await DatabaseProvider.pool.query(query, [id]);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  async getUserWithPasswordByLogin(login: User['login']): Promise<Nullable<{ user: User, password: string }>> {
+    const query = 'SELECT * FROM users AS u WHERE u.login = $1;';
+    const { rows } = await DatabaseProvider.pool.query<IUserEntity>(query, [login]);
+
+    if (!rows[0])
+      return null;
+
+    const user = new User();
+    user.login = rows[0].login;
+    user.id = rows[0].id;
+
+    return { user, password: rows[0].password };
   }
 }

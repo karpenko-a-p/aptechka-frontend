@@ -8,7 +8,6 @@ import bcrypt from 'bcrypt';
 import { default as jwt } from 'jsonwebtoken';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'application/constants/auth';
 import { cookies } from 'next/headers';
-import * as process from 'node:process';
 
 const { checkUserExistsByLogin, createUser } = userRepository();
 
@@ -60,7 +59,7 @@ function validatePayload(login: string, password: string): string[] {
     return errors;
   }
 
-  if (login.length < 6 || login.length > 30)
+  if (login.length < 6 || login.length > 32)
     errors.push('Минимальная длинна логина 6 символов, максимальная 32 символов');
 
   if (!/^[a-zA-Z\d \-_]+$/.test(login)) errors.push('Логин содержит недопустимые символы');

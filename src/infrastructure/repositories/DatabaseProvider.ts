@@ -2,11 +2,11 @@ import { Pool, PoolClient } from 'pg';
 
 export class DatabaseProvider {
   static readonly pool = new Pool({
-    host: 'database',
-    user: 'user',
+    host: 'postgres',
+    user: 'admin',
     password: 'password',
     port: 5432,
-    database: 'aptechka-database'
+    database: 'aptechka_database'
   });
 
   static async transaction<TResult = void>(callback: (client: PoolClient) => Promise<TResult>): Promise<TResult> {

@@ -9,6 +9,8 @@ export interface IUserRepository {
   getUserById(id: User['id']): Promise<Nullable<User>>;
 
   deleteUserById(id: User['id']): Promise<void>;
+
+  getUserWithPasswordByLogin(login: User['login']): Promise<Nullable<{ user: User, password: string }>>;
 }
 
 export const USER_REPOSITORY = new Token<IUserRepository>();
