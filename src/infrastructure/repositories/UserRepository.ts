@@ -7,6 +7,7 @@ import { cache } from 'react';
 interface IUserEntity {
   id: number;
   login: string;
+  password: string;
 }
 
 @Service(USER_REPOSITORY)
@@ -32,7 +33,7 @@ export class UserRepository implements IUserRepository {
    */
   async createUser(login: string, password: string): Promise<User> {
     const query = 'INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *;';
-    const { rows } = await DatabaseProvider.pool.query<IUserEntity>(query, [login, password]);
+    const { rows } = await DatabaseProvider.pool.query<Omit<IUserEntity, 'password'>>(query, [login, password]);
 
     const newUser = new User();
     newUser.login = rows[0].login;
@@ -45,8 +46,8 @@ export class UserRepository implements IUserRepository {
    * @inheritDoc
    */
   async getUserById(id: User['id']): Promise<Nullable<User>> {
-    const query = 'SELECT * FROM users AS u WHERE u.id = $1;';
-    const { rows } = await DatabaseProvider.pool.query<IUserEntity>(query, [id]);
+    const query = 'SELECT id, login FROM users AS u WHERE u.id = $1;';
+    const { rows } = await DatabaseProvider.pool.query<Omit<IUserEntity, 'password'>>(query, [id]);
 
     if (!rows[0])
       return null;
@@ -63,6 +64,6 @@ export class UserRepository implements IUserRepository {
    */
   async deleteUserById(id: User['id']): Promise<void> {
     const query = 'DELETE FROM users AS u WHERE u.id = $1;';
-    await DatabaseProvider.pool.query<IUserEntity>(query, [id]);
+    await DatabaseProvider.pool.query(query, [id]);
   }
 }
