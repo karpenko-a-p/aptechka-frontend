@@ -1,5 +1,4 @@
-import { Token } from 'typedi';
-import { getService } from 'application/utils';
+import { Container, Token } from 'typedi';
 
 export interface ILogger {
   log(...args: unknown[]):void;
@@ -11,4 +10,4 @@ export interface ILogger {
 
 export const LOGGER = new Token<ILogger>();
 
-export const logger = () => getService(LOGGER);
+export const logger = () => Container.get(LOGGER);

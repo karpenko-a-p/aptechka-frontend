@@ -3,7 +3,7 @@
 import 'server-only';
 import { IActionResult } from 'application/abstractions/utils/IActionResult';
 import { cookies } from 'next/headers';
-import { LOGIN_SUCCESS, LOGIN_VALIDATION_ERROR } from 'application/actions/login.constants';
+import { LoginResult } from 'application/actions/login.constants';
 
 export async function login(payload: FormData): Promise<IActionResult> {
   const formLogin = payload.get('login') as string;
@@ -12,13 +12,13 @@ export async function login(payload: FormData): Promise<IActionResult> {
   const validationResult = validatePayload(formLogin, password);
 
   if (validationResult.length)
-    return { code: LOGIN_VALIDATION_ERROR, payload: validationResult };
+    return { code: LoginResult.ValidationFailure, payload: validationResult };
 
   const cookie = await cookies();
 
   // TODO login
 
-  return { code: LOGIN_SUCCESS, payload: null };
+  return { code: LoginResult.Success, payload: null };
 }
 
 function validatePayload(login: string, password: string): string[] {

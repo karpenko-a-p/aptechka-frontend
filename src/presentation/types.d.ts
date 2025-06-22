@@ -3,6 +3,12 @@ declare module '*.module.scss' {
   export default content;
 }
 
+declare type Nullable<TType> = TType | null;
+
+declare type Undefinable<TType> = TType | undefined;
+
+declare type Nilable<TType> = TType | null | undefined;
+
 declare type Children<TType = React.ReactNode> = Readonly<{ children: TType }>;
 
 declare type RouteSegment<TName extends string> = { params: Promise<Record<TName, string>> };

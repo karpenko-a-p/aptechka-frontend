@@ -31,6 +31,8 @@
     "@storybook/addon-essentials": "8.4.7",
     "@storybook/nextjs": "8.4.7",
     "@tailwindcss/postcss": "4.1.8",
+    "@types/bcrypt": "5.0.2",
+    "@types/jsonwebtoken": "9.0.10",
     "@types/lodash": "4.17.13",
     "@types/node": "22.13.1",
     "@types/pg": "8.15.4",

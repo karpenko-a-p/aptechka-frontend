@@ -1,5 +1,4 @@
-import { Token } from 'typedi';
-import { getService } from 'application/utils';
+import { Container, Token } from 'typedi';
 import { News } from 'application/models/News';
 
 export interface INewsRepository {
@@ -12,4 +11,4 @@ export interface INewsRepository {
 
 export const NEWS_REPOSITORY = new Token<INewsRepository>();
 
-export const newsRepository = () => getService(NEWS_REPOSITORY);
+export const newsRepository = () => Container.get(NEWS_REPOSITORY);

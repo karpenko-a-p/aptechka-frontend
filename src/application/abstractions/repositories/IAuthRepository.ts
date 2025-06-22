@@ -1,5 +1,4 @@
-import { Token } from 'typedi';
-import { getService } from 'application/utils';
+import { Container, Token } from 'typedi';
 import { User } from 'application/models/User';
 
 export interface IAuthRepository {
@@ -9,4 +8,4 @@ export interface IAuthRepository {
 
 export const AUTH_REPOSITORY = new Token<IAuthRepository>();
 
-export const authRepository = () => getService(AUTH_REPOSITORY);
+export const authRepository = () => Container.get(AUTH_REPOSITORY);
