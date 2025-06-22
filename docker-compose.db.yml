@@ -1,0 +1,19 @@
+version: '3.10'
+
+services:
+  postgres:
+    image: postgres:17.5-alpine3.22
+    container_name: postgres-database
+    ports:
+      - '5432:5432'
+    volumes:
+      - database-storage:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+      POSTGRES_DB: aptechka_database
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: unless-stopped
+
+volumes:
+  database-storage:

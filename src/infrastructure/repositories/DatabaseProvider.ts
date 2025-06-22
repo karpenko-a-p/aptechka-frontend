@@ -2,7 +2,7 @@ import { Pool, PoolClient } from 'pg';
 
 export class DatabaseProvider {
   static readonly pool = new Pool({
-    host: 'postgres',
+    host: 'localhost',
     user: 'admin',
     password: 'password',
     port: 5432,

@@ -1,15 +1,19 @@
 'use server';
 
+import 'reflect-metadata';
+import 'infrastructure/services';
+import 'infrastructure/repositories';
 import 'server-only';
 import { IActionResult } from 'application/abstractions/utils/IActionResult';
 import { cookies } from 'next/headers';
 import { LoginResult } from 'application/actions/login.constants';
 import { userRepository } from 'application/abstractions/repositories';
 import bcrypt from 'bcrypt';
-import { default as jwt } from 'jsonwebtoken';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'application/constants/auth';
+import { jwtService } from 'application/abstractions/services';
 
 const { getUserWithPasswordByLogin } = userRepository();
+const { sign } = jwtService();
 
 export async function login(payload: FormData): Promise<IActionResult> {
   const formLogin = payload.get('login') as string;
@@ -33,16 +37,7 @@ export async function login(payload: FormData): Promise<IActionResult> {
   if (!passwordVerified)
     return { code: LoginResult.InvalidLoginOrPassword, payload: null };
 
-  const secret = process.env.JWT_SECRET as string;
-
-  if (!secret)
-    throw new Error('JWT_SECRET is required');
-
-  const jwtToken = jwt.sign(userEntityDto.user, secret, {
-    expiresIn: Date.now() + AUTHORIZATION_EXPIRES,
-    issuer: 'Aptechka',
-    audience: 'http://aptechka.com',
-  });
+  const jwtToken = sign({ id: userEntityDto.user.id, login: userEntityDto.user.login });
 
   const cookie = await cookies();
 

@@ -74,7 +74,7 @@ export default function Page() {
             <IconLogin2 />
             Зарегистрироваться
           </button>
-          <Link href="/register">Войти</Link>
+          <Link href="/auth/register">Войти</Link>
         </div>
       </form>
     </div>

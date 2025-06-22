@@ -1,4 +1,4 @@
-import { ILogger, LOGGER } from 'application/abstractions/services/ILogger';
+import { ILogger, LOGGER } from 'application/abstractions/services';
 import { Service } from 'typedi';
 
 @Service(LOGGER)
