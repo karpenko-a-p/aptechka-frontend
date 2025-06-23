@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { sleep } from 'application/utils';
+import { sleep } from 'application/utils/sleep';
 
 export type UseTransitionProps = {
   /**

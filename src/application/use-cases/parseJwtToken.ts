@@ -10,7 +10,12 @@ const { getTokenPayload, sign } = jwtService();
  */
 export async function parseJwtToken(): Promise<Nullable<IJwtTokenPayload>> {
   const cookie = await cookies();
-  const tokenPayload = getTokenPayload(cookie.get(AUTHORIZATION_COOKIE_NAME)?.value as string);
+  const jwtToken = cookie.get(AUTHORIZATION_COOKIE_NAME)?.value;
+
+  if (!jwtToken)
+    return null;
+
+  const tokenPayload = getTokenPayload(jwtToken);
 
   if(!tokenPayload)
     return null;

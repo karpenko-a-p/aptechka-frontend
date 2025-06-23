@@ -11,9 +11,15 @@ export interface IJwtTokenPayload {
 }
 
 export interface IJwtService {
+  /**
+   * Генерация токена
+   */
   sign(payload: Pick<IJwtTokenPayload, 'id' | 'login'>): string;
 
-  getTokenPayload(token: Nullable<string>): Nullable<IJwtTokenPayload>;
+  /**
+   * Чтение данных из токена
+   */
+  getTokenPayload(token: string): IJwtTokenPayload;
 }
 
 export const JWT_SERVICE = new Token<IJwtService>();
