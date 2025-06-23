@@ -2,9 +2,9 @@
 
 import React, { FC } from 'react';
 import { enableStaticRendering } from 'mobx-react-lite';
-import { isServer } from 'application/constants/side';
+import { IS_SERVER } from 'application/constants/side';
 
-enableStaticRendering(isServer);
+enableStaticRendering(IS_SERVER);
 
 export const Providers: FC<Children> = ({ children }) => {
   return <>{children}</>;

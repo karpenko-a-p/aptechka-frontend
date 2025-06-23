@@ -1,5 +1,9 @@
 import 'server-only';
-import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'application/constants/auth';
+import {
+  AUTHORIZATION_COOKIE_NAME,
+  AUTHORIZATION_EXPIRES,
+  AUTHORIZATION_REVALIDATION_TIME
+} from 'application/constants/auth';
 import { cookies } from 'next/headers';
 import { IJwtTokenPayload, jwtService } from 'application/abstractions/services';
 
@@ -21,7 +25,7 @@ export async function parseJwtToken(): Promise<Nullable<IJwtTokenPayload>> {
     return null;
 
   // Обноление токена если ему осталось жить меньше 2-х дней
-  if (tokenPayload.exp <= Date.now() + 1000 * 60 * 60 * 2) {
+  if (tokenPayload.exp <= Date.now() + AUTHORIZATION_REVALIDATION_TIME) {
     const jwtToken = sign({ id: tokenPayload.id, login: tokenPayload.login });
 
     cookie.set(AUTHORIZATION_COOKIE_NAME, jwtToken, {

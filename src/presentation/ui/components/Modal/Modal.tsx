@@ -4,7 +4,7 @@ import React, { FC, HTMLAttributes, ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTransition } from 'presentation/hooks';
 import cn from 'clsx';
-import { isServer } from 'application/constants/side';
+import { IS_SERVER } from 'application/constants/side';
 
 export type ModalProps = HTMLAttributes<HTMLDivElement> & {
   /**
@@ -37,7 +37,7 @@ export const Modal: FC<ModalProps> = (props) => {
     document.body.classList.remove('overflow-hidden');
   }, [rendered]);
 
-  if (!rendered || isServer) return null;
+  if (!rendered || IS_SERVER) return null;
 
   return createPortal(
     <div
