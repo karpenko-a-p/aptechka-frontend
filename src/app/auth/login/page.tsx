@@ -28,7 +28,7 @@ export default function Page() {
         return setErrors(['Неправильный логин или пароль']);
 
       if (isLoginSuccess(loginResult))
-        router.push('/profile');
+        return router.push('/profile');
 
       setErrors(['Произошла непредвиденная ошибка, попробуйте авторизоваться позже']);
     });

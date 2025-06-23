@@ -31,7 +31,7 @@ export class JwtService implements IJwtService {
   /**
    * @inheritDoc
    */
-  sign(payload: IJwtTokenPayload): string {
+  sign(payload: Pick<IJwtTokenPayload, 'id' | 'login'>): string {
     return jwt.sign(payload, this.jwtSecret, {
       expiresIn: Date.now() + AUTHORIZATION_EXPIRES,
       issuer: 'Aptechka',

@@ -5,14 +5,11 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 import { UserInformation } from 'presentation/components/UserInformation';
 import { UserLogin } from 'presentation/components/UserLogin';
-import { cookies } from 'next/headers';
-import { jwtService } from 'application/abstractions/services';
-import { AUTHORIZATION_COOKIE_NAME } from 'application/constants/auth';
+import { parseJwtToken } from 'application/use-cases/parseJwtToken';
 
 const { getCategories } = categoryRepository();
 const { getNewUsersDiscount, getNews } = newsRepository();
 const { getUserById } = userRepository();
-const { getTokenPayload } = jwtService();
 
 export const revalidate = 3600;
 
@@ -30,8 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const cookie = await cookies();
-  const tokenPayload = getTokenPayload(cookie.get(AUTHORIZATION_COOKIE_NAME)?.value as string);
+  const tokenPayload = await parseJwtToken();
 
   const [categories, discount, news, user] = await Promise.all([
     getCategories(),

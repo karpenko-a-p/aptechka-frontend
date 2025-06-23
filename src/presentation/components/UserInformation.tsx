@@ -11,7 +11,7 @@ export const UserInformation: FC<Props> = ({ user }) => {
       <IconUser className="text-black group-hover:text-blue-500 transition shrink-0" />
 
       <div className="flex flex-col">
-        <p className="group-hover:text-blue-500">{user.name}</p>
+        <p className="group-hover:text-blue-500">{user.login}</p>
         <p className="secondary text-xs -mt-1">id: {user.id}</p>
       </div>
     </Link>

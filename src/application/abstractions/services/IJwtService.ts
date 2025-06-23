@@ -4,10 +4,14 @@ import { User } from 'application/models/User';
 export interface IJwtTokenPayload {
   id: User['id'];
   login: User['login'];
+  iat: number;
+  exp: number;
+  aud: string;
+  iss: string;
 }
 
 export interface IJwtService {
-  sign(payload: IJwtTokenPayload): string;
+  sign(payload: Pick<IJwtTokenPayload, 'id' | 'login'>): string;
 
   getTokenPayload(token: Nullable<string>): Nullable<IJwtTokenPayload>;
 }
