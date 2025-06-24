@@ -111,7 +111,7 @@ export default async function Page() {
           <li className="flex flex-col p-4 bg-gray-200/80 rounded-lg" key={id}>
             <h4 className="text-base">{name}</h4>
             <p className="text-sm grow mb-2">{content}</p>
-            <p className="text-xs text-gray-400">{date.toISOString()}</p>
+            <p className="text-xs text-gray-400">{date.getFullYear()}</p>
           </li>
         ))}
       </ul>
