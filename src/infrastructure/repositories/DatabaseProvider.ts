@@ -1,14 +1,15 @@
 import { Pool, PoolClient } from 'pg';
+import { Environment } from 'application/utils/Environment';
 
 export class DatabaseProvider {
-  static readonly pool = new Pool({
-    host: 'localhost',
-    user: 'admin',
-    password: 'password',
-    port: 5432,
-    database: 'aptechka_database'
-  });
+  /**
+   * Пул клиентов для работы с БД
+   */
+  static readonly pool = new Pool({ connectionString: Environment.DATABASE_CONNECTION_STRING });
 
+  /**
+   * Транзакция
+   */
   static async transaction<TResult = void>(callback: (client: PoolClient) => Promise<TResult>): Promise<TResult> {
     const client = await DatabaseProvider.pool.connect();
 

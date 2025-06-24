@@ -8,6 +8,11 @@ export class Environment {
   static readonly JWT_SECRET = Environment.readFromEnv('JWT_SECRET');
 
   /**
+   * Строка подключения к БД
+   */
+  static readonly DATABASE_CONNECTION_STRING = Environment.readFromEnv('DATABASE_CONNECTION_STRING');
+
+  /**
    * Чтение переменной окружения
    */
   private static readFromEnv(key: string): string {
