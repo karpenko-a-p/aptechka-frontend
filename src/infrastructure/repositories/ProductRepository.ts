@@ -2,23 +2,66 @@ import { IProductRepository, PRODUCT_REPOSITORY } from 'application/abstractions
 import { Category } from 'application/models/Category';
 import { Product } from 'application/models/Product';
 import { Service } from 'typedi';
-import { cache } from 'react';
 import 'server-only';
+import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { Bind, Cache } from 'application/decorators';
+
+interface IProductEntity {
+  id: number;
+  name: string;
+  description: string;
+  category_id: string;
+}
 
 @Service(PRODUCT_REPOSITORY)
 export class ProductRepository implements IProductRepository {
-  private readonly products: Product[] = [];
+  /**
+   * Запрос для получения продукта по идентификатору
+   */
+  private static selectProductByIdQuery = DatabaseProvider.compileQuery<IProductEntity>(`
+    SELECT * FROM products WHERE id = $1
+  `);
 
-  constructor() {
-    this.getProductsByCategoryId = cache(this.getProductsByCategoryId.bind(this));
-    this.getProductById = cache(this.getProductById.bind(this));
+  /**
+   * @inheritDoc
+   */
+  @Cache()
+  @Bind()
+  async getProductById(id: Product['id']): Promise<Nullable<Product>> {
+    const { rows } = await ProductRepository.selectProductByIdQuery([id]);
+
+    if (!rows[0]) return null;
+
+    return ProductRepository.entityToModel(rows[0]);
   }
 
-  getProductById(id: Product['id']): Product | null {
-    return this.products.find((product) => product.id === id) ?? null;
+  /**
+   * Запрос для получения продуктов по идентификатору категории
+   */
+  private static selectProductByCategoryIdQuery = DatabaseProvider.compileQuery<IProductEntity>(`
+    SELECT * FROM products WHERE category_id = $1;
+  `);
+
+  /**
+   * @inheritDoc
+   */
+  @Cache()
+  @Bind()
+  async getProductsByCategoryId(id: Category['id']): Promise<Product[]> {
+    const { rows } = await ProductRepository.selectProductByCategoryIdQuery([id]);
+    return rows.map(ProductRepository.entityToModel);
   }
 
-  getProductsByCategoryId(id: Category['id']): Product[] {
-    return this.products.slice(2);
+  /**
+   * Маппинг сущности из БД к модели
+   */
+  private static entityToModel(entity: IProductEntity): Product {
+    const product = new Product();
+    product.id = entity.id;
+    product.name = entity.name;
+    product.description = entity.description;
+    // остальные поля, но мне уже лень разрабатывать =)
+
+    return product;
   }
 }

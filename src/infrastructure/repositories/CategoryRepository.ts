@@ -19,18 +19,23 @@ interface ICategoryWithKeyWordsEntity extends ICategoryEntity {
 @Service(CATEGORY_REPOSITORY)
 export class CategoryRepository implements ICategoryRepository {
   /**
+   * Получение списка всех категорий
+   */
+  private static selectAllCategoriesQuery = DatabaseProvider.compileQuery<ICategoryWithKeyWordsEntity>(`
+    SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words
+    FROM categories AS c
+    JOIN categories_key_words AS ckw ON ckw.category_id = c.id
+    GROUP BY c.id
+    ORDER BY c.id;
+  `);
+
+  /**
    * @inheritDoc
    */
   @Cache()
   @Bind()
   async getCategories(): Promise<Category[]> {
-    const query = `
-      SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') as key_words
-      FROM categories AS c
-      JOIN categories_key_words AS ckw ON ckw.category_id = c.id
-      GROUP BY c.id;
-    `;
-    const { rows } = await DatabaseProvider.pool.query<ICategoryWithKeyWordsEntity>(query);
+    const { rows } = await CategoryRepository.selectAllCategoriesQuery();
     return rows.map(CategoryRepository.entityToModel);
   }
 
@@ -41,7 +46,7 @@ export class CategoryRepository implements ICategoryRepository {
   @Bind()
   async getCategoryById(id: Category['id']): Promise<Nullable<Category>> {
     const query = `
-      SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') as key_words
+      SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words
       FROM categories AS c
       JOIN categories_key_words AS ckw ON ckw.category_id = c.id
       WHERE id = $1

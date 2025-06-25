@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
-import { categoryRepository } from 'application/abstractions/repositories';
+import { categoryRepository, productRepository } from 'application/abstractions/repositories';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 const { getCategoryById } = categoryRepository();
+const { getProductsByCategoryId } = productRepository();
 
 export const revalidate = 300;
 
@@ -22,10 +23,11 @@ export async function generateMetadata({ params }: RouteSegment<'id'>): Promise<
 type Props = RouteSegment<'id'> & SearchParams<'page'>;
 
 export default async function Page({ params, searchParams }: Props) {
-  const category = await getCategoryById((await params).id);
-  const { page } = await searchParams;
+  const categoryId = (await params).id;
+  const [category, products] = await Promise.all([getCategoryById(categoryId), getProductsByCategoryId(categoryId)]);
 
-  if (!category) notFound();
+  if (!category)
+    notFound();
 
   return (
     <div className="container grow flex flex-col my-4">
@@ -34,15 +36,18 @@ export default async function Page({ params, searchParams }: Props) {
         На главную
       </Link>
 
-      <div className="flex grow gap-2">
-        <div className="flex-1 rounded-lg border-2 border-gray-200 p-2">
-          <h2 className="text-base">Фильтры</h2>
-        </div>
-
-        <div className="flex-3">
-          <p>Products</p>
-        </div>
-      </div>
+      <h2>Продукты</h2>
+      <ul className="flex flex-col gap-2 my-2">
+        {products.map(({ id, name, description }) => (
+          <li key={id}>
+            <Link href={`product/${id}`} className="no-underline w-full hover:bg-gray-200 transition p-2 border border-1 border-gray-200 rounded-lg">
+              <h3>{name}</h3>
+              <p>{description}</p>
+              <p className="secondary text-xs">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, illum?</p>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

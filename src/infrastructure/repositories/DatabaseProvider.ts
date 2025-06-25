@@ -1,4 +1,4 @@
-import { Pool, PoolClient } from 'pg';
+import { Pool, PoolClient, QueryResultRow } from 'pg';
 import { Environment } from 'application/utils/Environment';
 
 export class DatabaseProvider {
@@ -6,6 +6,14 @@ export class DatabaseProvider {
    * Пул клиентов для работы с БД
    */
   static readonly pool = new Pool({ connectionString: Environment.DATABASE_CONNECTION_STRING });
+
+  /**
+   * Оптимизация запроса
+   */
+  static compileQuery<TRow extends QueryResultRow>(query: string ) {
+    const optimizedQuery = query.replaceAll(/\s{2,}/, ' ');
+    return (args?: unknown[]) => DatabaseProvider.pool.query<TRow>(optimizedQuery, args);
+  }
 
   /**
    * Транзакция

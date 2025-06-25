@@ -3,9 +3,15 @@ import { Category } from 'application/models/Category';
 import { Container, Token } from 'typedi';
 
 export interface IProductRepository {
-  getProductById(id: Product['id']): Product | null;
+  /**
+   * Получение продукта по идентификатору
+   */
+  getProductById(id: Product['id']): Promise<Nullable<Product>>;
 
-  getProductsByCategoryId(id: Category['id']): Product[];
+  /**
+   * Получение всех продуктов относящихся к определенной категории
+   */
+  getProductsByCategoryId(id: Category['id']): Promise<Product[]>;
 }
 
 export const PRODUCT_REPOSITORY = new Token<IProductRepository>();
