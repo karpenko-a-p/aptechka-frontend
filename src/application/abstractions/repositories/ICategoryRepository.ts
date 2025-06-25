@@ -10,7 +10,7 @@ export interface ICategoryRepository {
   /**
    * Получение категории по идентификатору
    */
-  getCategoryById(id: Category['id']): Promise<Category | null>;
+  getCategoryById(id: Category['id']): Promise<Nullable<Category>>;
 }
 
 export const CATEGORY_REPOSITORY = new Token<ICategoryRepository>();

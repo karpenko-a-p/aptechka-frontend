@@ -1,56 +1,71 @@
 import { CATEGORY_REPOSITORY, ICategoryRepository } from 'application/abstractions/repositories';
 import { Category } from 'application/models/Category';
 import { Service } from 'typedi';
-import { cache } from 'react';
 import 'server-only';
+import { Bind, Cache } from 'application/decorators';
+import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+
+interface ICategoryEntity {
+  id: string;
+  name: string;
+  description: string;
+  banner: string;
+}
+
+interface ICategoryWithKeyWordsEntity extends ICategoryEntity {
+  key_words: string;
+}
 
 @Service(CATEGORY_REPOSITORY)
 export class CategoryRepository implements ICategoryRepository {
-  private readonly categories: Category[] = [
-    {
-      id: 'cat-1',
-      name: 'Category one',
-      description: 'Category one long description, very very long description about this category...',
-      banner:
-        'https://images.unsplash.com/photo-1603398938378-e54eab446dde?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      keysWords: ['some', 'keys', 'words'],
-    },
-    {
-      id: 'cat-2',
-      name: 'Category two',
-      description: 'Category two long description',
-      banner:
-        'https://images.unsplash.com/photo-1655174041849-49ed985e9ffb?q=80&w=3136&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      keysWords: ['some', 'other', 'keys', 'words'],
-    },
-    {
-      id: 'cat-3',
-      name: 'Category three',
-      description: 'Category three long description',
-      banner:
-        'https://images.unsplash.com/photo-1544829894-eb023ba95a38?q=80&w=2848&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      keysWords: ['pills', 'steroids', 'paracetamol'],
-    },
-    {
-      id: 'cat-4',
-      name: 'Category four',
-      description: 'Category four long description',
-      banner:
-        'https://images.unsplash.com/photo-1610542443439-279b81fba808?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      keysWords: ['pharma', 'testo'],
-    },
-  ];
-
-  constructor() {
-    this.getCategories = cache(this.getCategories.bind(this));
-    this.getCategoryById = cache(this.getCategoryById.bind(this));
-  }
-
+  /**
+   * @inheritDoc
+   */
+  @Cache()
+  @Bind()
   async getCategories(): Promise<Category[]> {
-    return this.categories;
+    const query = `
+      SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') as key_words
+      FROM categories AS c
+      JOIN categories_key_words AS ckw ON ckw.category_id = c.id
+      GROUP BY c.id;
+    `;
+    const { rows } = await DatabaseProvider.pool.query<ICategoryWithKeyWordsEntity>(query);
+    return rows.map(CategoryRepository.entityToModel);
   }
 
-  async getCategoryById(id: Category['id']): Promise<Category | null> {
-    return this.categories.find((category) => category.id === id) ?? null;
+  /**
+   * @inheritDoc
+   */
+  @Cache()
+  @Bind()
+  async getCategoryById(id: Category['id']): Promise<Nullable<Category>> {
+    const query = `
+      SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') as key_words
+      FROM categories AS c
+      JOIN categories_key_words AS ckw ON ckw.category_id = c.id
+      WHERE id = $1
+      GROUP BY c.id;
+    `;
+
+    const { rows } = await DatabaseProvider.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
+
+    if (!rows[0])
+      return null;
+
+    return CategoryRepository.entityToModel(rows[0]);
+  }
+
+  /**
+   * Маппинг сущности из БД к модели
+   */
+  private static entityToModel(entity: ICategoryWithKeyWordsEntity): Category {
+    const category = new Category();
+    category.id = entity.id;
+    category.name = entity.name;
+    category.description = entity.description;
+    category.banner = entity.banner;
+    category.keysWords = entity.key_words.split(',');
+    return category;
   }
 }
