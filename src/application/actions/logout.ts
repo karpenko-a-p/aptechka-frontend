@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers';
 import { AUTHORIZATION_COOKIE_NAME } from 'application/constants/auth';
 import { redirect } from 'next/navigation';
+import 'server-only';
 
 /**
  * Выход из аккаунта (очистка токена)

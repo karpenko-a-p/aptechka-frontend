@@ -1,4 +1,4 @@
-import { Pool, PoolClient, QueryResultRow } from 'pg';
+import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
 import { Environment } from 'application/utils/Environment';
 
 export class DatabaseProvider {
@@ -10,9 +10,9 @@ export class DatabaseProvider {
   /**
    * Оптимизация запроса
    */
-  static compileQuery<TRow extends QueryResultRow>(query: string ) {
-    const optimizedQuery = query.replaceAll(/\s{2,}/, ' ');
-    return (args?: unknown[]) => DatabaseProvider.pool.query<TRow>(optimizedQuery, args);
+  static compileQuery<TRow extends QueryResultRow>(query: string) {
+    const optimizedQuery = query.replaceAll(/\s{2,}/g, ' ').trim();
+    return (args?: unknown[]): Promise<QueryResult<TRow>> => DatabaseProvider.pool.query<TRow>(optimizedQuery, args);
   }
 
   /**

@@ -43,6 +43,7 @@ export default async function Page({ params, searchParams }: Props) {
             <Link href={`product/${id}`} className="no-underline w-full hover:bg-gray-200 transition p-2 border border-1 border-gray-200 rounded-lg">
               <h3>{name}</h3>
               <p>{description}</p>
+              <p>Цена: <strong>Бесплатно</strong></p>
               <p className="secondary text-xs">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, illum?</p>
             </Link>
           </li>
