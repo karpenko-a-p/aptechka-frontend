@@ -16,4 +16,4 @@ export interface IProductRepository {
 
 export const PRODUCT_REPOSITORY = new Token<IProductRepository>();
 
-export const productRepository = () => Container.get(PRODUCT_REPOSITORY);
+export const productRepository = (): IProductRepository => Container.get(PRODUCT_REPOSITORY);

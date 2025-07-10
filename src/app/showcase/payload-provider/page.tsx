@@ -1,8 +1,9 @@
 import { PayloadProvider } from 'presentation/providers/PayloadProvider';
 import { PayloadConsumer } from './PayloadConsumer';
 import Link from 'next/link';
+import { type JSX } from 'react';
 
-export default async function Page() {
+export default async function Page(): Promise<JSX.Element> {
   const somePayload = ['you', 'looks', 'good', 'as', 'usual'];
 
   return (

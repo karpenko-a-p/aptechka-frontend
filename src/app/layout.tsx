@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import 'presentation/ui/variables/tailwindcss.css';
 import { Providers } from 'presentation/components/Providers';
 import { Inter } from 'next/font/google';
+import { type JSX } from 'react';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 /**
  * Корневая размета
  */
-export default function RootLayout({ children }: Children) {
+export default function RootLayout({ children }: Children): JSX.Element {
   return (
     <html lang="ru">
       <body className={inter.className}>

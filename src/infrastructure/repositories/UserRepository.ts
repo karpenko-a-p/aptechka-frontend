@@ -1,5 +1,5 @@
 import { IUserRepository, USER_REPOSITORY } from 'application/abstractions/repositories';
-import { User } from 'src/application/models/User';
+import { User, type UserId, type UserLogin, type UserPassword } from 'application/models/User';
 import { Service } from 'typedi';
 import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
 import { Cache, Bind } from 'application/decorators';
@@ -16,7 +16,7 @@ export class UserRepository implements IUserRepository {
    * @inheritDoc
    */
   @Bind()
-  async checkUserExistsByLogin(login: User['login']): Promise<boolean> {
+  async checkUserExistsByLogin(login: UserLogin): Promise<boolean> {
     const query = 'SELECT 1 FROM users AS u WHERE u.login = $1;';
     const { rowCount } = await DatabaseProvider.pool.query(query, [login]);
     return !!rowCount;
@@ -26,15 +26,10 @@ export class UserRepository implements IUserRepository {
    * @inheritDoc
    */
   @Bind()
-  async createUser(login: string, password: string): Promise<User> {
+  async createUser(login: UserLogin, password: UserPassword): Promise<User> {
     const query = 'INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *;';
     const { rows } = await DatabaseProvider.pool.query<Omit<IUserEntity, 'password'>>(query, [login, password]);
-
-    const newUser = new User();
-    newUser.login = rows[0].login;
-    newUser.id = rows[0].id;
-
-    return newUser;
+    return UserRepository.entityToModel(rows[0]);
   }
 
   /**
@@ -42,25 +37,17 @@ export class UserRepository implements IUserRepository {
    */
   @Cache()
   @Bind()
-  async getUserById(id: User['id']): Promise<Nullable<User>> {
+  async getUserById(id: UserId): Promise<Nullable<User>> {
     const query = 'SELECT id, login FROM users AS u WHERE u.id = $1;';
     const { rows } = await DatabaseProvider.pool.query<Omit<IUserEntity, 'password'>>(query, [id]);
-
-    if (!rows[0])
-      return null;
-
-    const user = new User();
-    user.login = rows[0].login;
-    user.id = rows[0].id;
-
-    return user;
+    return rows[0] ? UserRepository.entityToModel(rows[0]) : null;
   }
 
   /**
    * @inheritDoc
    */
   @Bind()
-  async deleteUserById(id: User['id']): Promise<void> {
+  async deleteUserById(id: UserId): Promise<void> {
     const query = 'DELETE FROM users AS u WHERE u.id = $1;';
     await DatabaseProvider.pool.query(query, [id]);
   }
@@ -69,17 +56,16 @@ export class UserRepository implements IUserRepository {
    * @inheritDoc
    */
   @Bind()
-  async getUserWithPasswordByLogin(login: User['login']): Promise<Nullable<{ user: User, password: string }>> {
+  async getUserWithPasswordByLogin(login: UserLogin): Promise<Nullable<User>> {
     const query = 'SELECT * FROM users AS u WHERE u.login = $1;';
     const { rows } = await DatabaseProvider.pool.query<IUserEntity>(query, [login]);
+    return rows[0] ? UserRepository.entityToModel(rows[0]) : null;
+  }
 
-    if (!rows[0])
-      return null;
-
-    const user = new User();
-    user.login = rows[0].login;
-    user.id = rows[0].id;
-
-    return { user, password: rows[0].password };
+  private static entityToModel(entity: Partial<IUserEntity>): User {
+    return new User()
+      .setId(entity.id)
+      .setLogin(entity.login)
+      .setPassword(entity.password);
   }
 }

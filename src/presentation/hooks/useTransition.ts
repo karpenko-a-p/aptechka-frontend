@@ -12,10 +12,15 @@ export type UseTransitionProps = {
   state: boolean;
 }
 
+export type UseTransitionReturn = {
+  rendered: boolean;
+  visible: boolean;
+}
+
 /**
  * Переход
  */
-export const useTransition = ({ time = 250, state }: UseTransitionProps) => {
+export const useTransition = ({ time = 250, state }: UseTransitionProps): UseTransitionReturn => {
   const [rendered, setRendered] = useState(state);
   const [visible, setVisible] = useState(state);
 
@@ -27,7 +32,7 @@ export const useTransition = ({ time = 250, state }: UseTransitionProps) => {
     const timeoutId = setTimeout(() => setRendered(false), time);
     setVisible(false);
 
-    return () => clearTimeout(timeoutId);
+    return (): void => clearTimeout(timeoutId);
   }, [state]);
 
   // Старт перехода

@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { IconLogin2 } from '@tabler/icons-react';
 
-export const UserLogin = () => {
+export const UserLogin: FC = () => {
   const router = useRouter();
 
   return (

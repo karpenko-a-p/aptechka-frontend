@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { userRepository } from 'application/abstractions/repositories';
 import { ExitButton } from 'src/app/profile/ExitButton';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import { IconShoppingCart } from '@tabler/icons-react';
 
 const { getUserById } = userRepository();
@@ -12,7 +13,7 @@ export const revalidate = 0;
 /**
  * Профиль пользователя, только для авторизованного юзера
  */
-export default async function Page() {
+export default async function Page(): Promise<JSX.Element> {
   const tokenPayload = await parseJwtToken();
 
   if (!tokenPayload)

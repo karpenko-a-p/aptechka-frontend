@@ -54,23 +54,18 @@ export class CategoryRepository implements ICategoryRepository {
     `;
 
     const { rows } = await DatabaseProvider.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
-
-    if (!rows[0])
-      return null;
-
-    return CategoryRepository.entityToModel(rows[0]);
+    return rows[0] ? CategoryRepository.entityToModel(rows[0]) : null;
   }
 
   /**
    * Маппинг сущности из БД к модели
    */
   private static entityToModel(entity: ICategoryWithKeyWordsEntity): Category {
-    const category = new Category();
-    category.id = entity.id;
-    category.name = entity.name;
-    category.description = entity.description;
-    category.banner = entity.banner;
-    category.keysWords = entity.key_words.split(',');
-    return category;
+    return new Category()
+      .setId(entity.id)
+      .setName(entity.name)
+      .setDescription(entity.description)
+      .setBanner(entity.banner)
+      .setKeywords(entity.key_words.split(','));
   }
 }

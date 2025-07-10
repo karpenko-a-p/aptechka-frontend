@@ -3,6 +3,7 @@
 import { Input } from 'presentation/ui/components';
 import { IconEye, IconLogin2 } from '@tabler/icons-react';
 import Link from 'next/link';
+import { type JSX } from 'react';
 import { useBoolean } from 'presentation/hooks';
 import { FormEvent, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
@@ -13,13 +14,13 @@ import {
   isRegisterValidationError,
 } from 'application/actions/register.constants';
 
-export default function Page() {
+export default function Page(): JSX.Element {
   const { value: showPassword, toggle } = useBoolean();
   const [errors, setErrors] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     startTransition(async () => {

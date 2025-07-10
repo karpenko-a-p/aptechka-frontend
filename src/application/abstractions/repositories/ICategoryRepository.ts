@@ -15,4 +15,4 @@ export interface ICategoryRepository {
 
 export const CATEGORY_REPOSITORY = new Token<ICategoryRepository>();
 
-export const categoryRepository = () => Container.get(CATEGORY_REPOSITORY);
+export const categoryRepository = (): ICategoryRepository => Container.get(CATEGORY_REPOSITORY);

@@ -20,4 +20,4 @@ export interface INewsRepository {
 
 export const NEWS_REPOSITORY = new Token<INewsRepository>();
 
-export const newsRepository = () => Container.get(NEWS_REPOSITORY);
+export const newsRepository = (): INewsRepository => Container.get(NEWS_REPOSITORY);

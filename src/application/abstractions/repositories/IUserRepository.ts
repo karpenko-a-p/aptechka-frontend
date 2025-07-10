@@ -1,18 +1,18 @@
-import { User } from 'application/models/User';
+import { User, UserId, UserLogin, UserPassword } from 'application/models/User';
 import { Container, Token } from 'typedi';
 
 export interface IUserRepository {
-  checkUserExistsByLogin(login: User['login']): Promise<boolean>;
+  checkUserExistsByLogin(login: UserLogin): Promise<boolean>;
 
-  createUser(login: string, password: string): Promise<User>;
+  createUser(login: UserLogin, password: UserPassword): Promise<User>;
 
-  getUserById(id: User['id']): Promise<Nullable<User>>;
+  getUserById(id: UserId): Promise<Nullable<User>>;
 
-  deleteUserById(id: User['id']): Promise<void>;
+  deleteUserById(id: UserId): Promise<void>;
 
-  getUserWithPasswordByLogin(login: User['login']): Promise<Nullable<{ user: User, password: string }>>;
+  getUserWithPasswordByLogin(login: UserLogin): Promise<Nullable<User>>;
 }
 
 export const USER_REPOSITORY = new Token<IUserRepository>();
 
-export const userRepository = () => Container.get(USER_REPOSITORY);
+export const userRepository = (): IUserRepository => Container.get(USER_REPOSITORY);

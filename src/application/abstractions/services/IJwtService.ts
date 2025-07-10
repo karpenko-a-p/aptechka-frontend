@@ -24,4 +24,4 @@ export interface IJwtService {
 
 export const JWT_SERVICE = new Token<IJwtService>();
 
-export const jwtService = () => Container.get(JWT_SERVICE);
+export const jwtService = (): IJwtService => Container.get(JWT_SERVICE);

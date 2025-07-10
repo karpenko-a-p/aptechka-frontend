@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 /**
  * Политика конфиденциальности
  */
-export default function Page() {
+export default function Page(): JSX.Element {
   return (
     <div className="container">
       <h1 className="my-4">Политика конфиденциальности</h1>

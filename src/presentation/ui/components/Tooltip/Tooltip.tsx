@@ -79,7 +79,7 @@ export const Tooltip: FC<TooltipProps> = (props) => {
   useEffect(() => {
     document.addEventListener('scroll', close);
 
-    return () => document.removeEventListener('scroll', close);
+    return (): void => document.removeEventListener('scroll', close);
   }, []);
 
   if (!component) return null;

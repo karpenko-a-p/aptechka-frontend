@@ -4,7 +4,7 @@ import { Constructable, Container, Token } from 'typedi';
 /**
  * Получение сервиса из контейнера
  */
-export const useService = <TService>(service: Constructable<TService> | Token<TService>) => {
+export const useService = <TService>(service: Constructable<TService> | Token<TService>): TService => {
   const serviceRef = useRef<TService>();
 
   if (!serviceRef.current)

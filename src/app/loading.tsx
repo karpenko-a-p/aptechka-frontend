@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
-export default function Loading() {
+export default function Loading(): JSX.Element {
   return (
     <div className="container flex flex-col gap-4 my-4">
       <div className="skeleton" />

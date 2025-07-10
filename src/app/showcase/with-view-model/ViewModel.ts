@@ -9,7 +9,7 @@ export class ViewModel {
   /**
    * Получение значение счетчика из глобального стора
    */
-  get count() {
+  get count(): number {
     return this.counterStore.getCount();
   }
 }

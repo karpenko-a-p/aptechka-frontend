@@ -25,7 +25,7 @@ export type ModalProps = HTMLAttributes<HTMLDivElement> & {
   contentClassName?: string;
 };
 
-const preventPropagation = (event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation();
+const preventPropagation = (event: React.MouseEvent<HTMLDivElement>): void => event.stopPropagation();
 
 export const Modal: FC<ModalProps> = (props) => {
   const { children, open, className, contentClassName, onClose, ...restProps } = props;

@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react';
 
 const PayloadContext = createContext<unknown>(null);
 
-export const usePayload = <TPayload = unknown,>() => {
+export const usePayload = <TPayload = unknown,>(): TPayload => {
   const payload = useContext(PayloadContext);
 
   if (!payload)

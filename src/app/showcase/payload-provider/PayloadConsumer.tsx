@@ -1,8 +1,9 @@
 'use client';
 
 import { usePayload } from 'presentation/providers/PayloadProvider';
+import { FC } from 'react';
 
-export const PayloadConsumer = () => {
+export const PayloadConsumer: FC = () => {
   const payload = usePayload<string[]>();
 
   return (

@@ -33,7 +33,7 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<HTMLInputElement, Checkbox
 
   const [innerChecked, setInnerChecked] = useState(defaultChecked);
   const checked = outerChecked ?? innerChecked;
-  const handleChange = onChange ?? (() => setInnerChecked(!checked));
+  const handleChange = onChange ?? ((): void => setInnerChecked(!checked));
 
   return (
     <div className={cn(className, 'checkbox')}>

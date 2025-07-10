@@ -1,7 +1,8 @@
 import { Counter } from './Counter';
 import Link from 'next/link';
+import { type JSX } from 'react';
 
-export default function Page() {
+export default function Page(): JSX.Element {
   return (
     <div className="container flex flex-col my-4">
       <h1>Страница с примером использования сторов</h1>

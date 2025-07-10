@@ -11,6 +11,7 @@ import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'application/constants/auth';
 import { cookies } from 'next/headers';
 import { jwtService } from 'application/abstractions/services';
+import { User } from 'application/models/User';
 
 const { checkUserExistsByLogin, createUser } = userRepository();
 const { sign } = jwtService();
@@ -57,14 +58,14 @@ function validatePayload(login: string, password: string): string[] {
     return errors;
   }
 
-  if (login.length < 6 || login.length > 32)
-    errors.push('Минимальная длинна логина 6 символов, максимальная 32 символов');
+  if (login.length < User.LOGIN_MIN_LENGTH || login.length > User.LOGIN_MAX_LENGTH)
+    errors.push(`Минимальная длинна логина ${User.LOGIN_MIN_LENGTH} символов, максимальная ${User.LOGIN_MAX_LENGTH} символов`);
 
-  if (!/^[a-zA-Z\d \-_]+$/.test(login))
+  if (!User.LOGIN_PATTERN.test(login))
     errors.push('Логин содержит недопустимые символы');
 
-  if (password.length < 6 || password.length > 120)
-    errors.push('Минимальная длинна пароля 6 символов, максимальная 120 символов');
+  if (password.length < User.PASSWORD_MIN_LENGTH || password.length > User.PASSWORD_MAX_LENGTH)
+    errors.push(`Минимальная длинна пароля ${User.PASSWORD_MIN_LENGTH} символов, максимальная ${User.PASSWORD_MAX_LENGTH} символов`);
 
   return errors;
 }

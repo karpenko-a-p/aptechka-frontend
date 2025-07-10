@@ -10,4 +10,4 @@ export interface ILogger {
 
 export const LOGGER = new Token<ILogger>();
 
-export const logger = () => Container.get(LOGGER);
+export const logger = (): ILogger => Container.get(LOGGER);

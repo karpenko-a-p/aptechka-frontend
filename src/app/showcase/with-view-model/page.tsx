@@ -3,8 +3,9 @@
 import { useService } from 'presentation/hooks/useService';
 import { ViewModel } from './ViewModel';
 import Link from 'next/link';
+import { type JSX } from 'react';
 
-export default function Page() {
+export default function Page(): JSX.Element {
   const { count } = useService(ViewModel);
 
   return (

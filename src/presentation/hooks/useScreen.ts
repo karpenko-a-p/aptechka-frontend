@@ -10,7 +10,7 @@ const enum Screen {
 /**
  * Брэйкпоинт
  */
-export const useScreen = () => {
+export const useScreen = (): Record<'mobile' | 'desktop' | 'tablet', boolean> => {
   const [breakpoint, setBreakpoint] = useState(Screen.Desktop);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const useScreen = () => {
 
     document.addEventListener('resize', resize);
 
-    return () => document.removeEventListener('resize', resize);
+    return (): void => document.removeEventListener('resize', resize);
   }, []);
 
   return {

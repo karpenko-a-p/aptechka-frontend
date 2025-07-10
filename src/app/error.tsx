@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { type JSX } from 'react';
 
-export default function Error() {
+export default function Error(): JSX.Element {
   return (
     <div className="container my-4 grow flex flex-col gap-4 items-center justify-center">
       <h1>Ошибка 👉👈</h1>

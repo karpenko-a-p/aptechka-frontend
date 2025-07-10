@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { categoryRepository, productRepository } from 'application/abstractions/repositories';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { type JSX } from 'react';
 
 const { getCategoryById } = categoryRepository();
 const { getProductsByCategoryId } = productRepository();
@@ -16,13 +17,11 @@ export async function generateMetadata({ params }: RouteSegment<'id'>): Promise<
   return {
     title: `Аптечка | ${category.name}`,
     description: category.description,
-    keywords: category.keysWords,
+    keywords: category.keywords,
   };
 }
 
-type Props = RouteSegment<'id'> & SearchParams<'page'>;
-
-export default async function Page({ params, searchParams }: Props) {
+export default async function Page({ params }: RouteSegment<'id'>): Promise<JSX.Element> {
   const categoryId = (await params).id;
   const [category, products] = await Promise.all([getCategoryById(categoryId), getProductsByCategoryId(categoryId)]);
 

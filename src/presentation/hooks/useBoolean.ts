@@ -1,9 +1,16 @@
 import { useCallback, useState } from 'react';
 
+export type UseBooleanReturn = {
+  value: boolean;
+  setTrue(): void;
+  setFalse(): void;
+  toggle(): void;
+}
+
 /**
  * Булева переменная
  */
-export const useBoolean = (initialState = false) => {
+export const useBoolean = (initialState = false): UseBooleanReturn => {
   const [value, setValue] = useState(initialState);
 
   const setTrue = useCallback(() => setValue(true), []);

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { userRepository, categoryRepository, newsRepository } from 'application/abstractions/repositories';
 import Image from 'next/image';
 import { Metadata } from 'next';
+import { type JSX } from 'react';
 import { UserInformation } from 'presentation/components/UserInformation';
 import { UserLogin } from 'presentation/components/UserLogin';
 import { parseJwtToken } from 'application/use-cases/parseJwtToken';
@@ -20,13 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Аптечка | Добро пожаловать',
     description: `Поиск лекарств по досутпным ценам | Скидки новым пользователям до ${discount}% | ${categories.length} категорий товаров`,
     keywords: categories
-      .map((category) => category.keysWords)
+      .map((category) => category.keywords)
       .flat(Infinity)
       .join(','),
   };
 }
 
-export default async function Page() {
+export default async function Page(): Promise<JSX.Element> {
   const tokenPayload = await parseJwtToken();
 
   const [categories, discount, news, user] = await Promise.all([
@@ -71,7 +72,7 @@ export default async function Page() {
       <h2 className="mb-2">Выберите категорию</h2>
 
       <ul className="grid grid-cols-2 gap-4 max-mobile:grid-cols-1 max-mobile:gap-2">
-        {categories.map(({ id, name, description, banner, keysWords }) => (
+        {categories.map(({ id, name, description, banner, keywords }) => (
           <li key={id}>
             <Link
               className="flex flex-col no-underline h-full border-2 border-gray-200 rounded-xl overflow-hidden p-2 w-full active:border-blue-500 hover:border-blue-500 transition"
@@ -85,7 +86,7 @@ export default async function Page() {
                 className="object-cover object-center w-full h-[25vh] rounded-lg select-none pointer-events-none"
               />
               <ul className="flex mt-2 gap-1.5 flex-wrap">
-                {keysWords.map((word) => (
+                {keywords.map((word) => (
                   <li key={word}>
                     <p className="badge">{word}</p>
                   </li>
