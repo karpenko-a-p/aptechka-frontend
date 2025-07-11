@@ -1,6 +1,6 @@
 import { INewsRepository, NEWS_REPOSITORY } from 'application/abstractions/repositories';
 import { Service } from 'typedi';
-import { News } from 'application/models/News';
+import { News, type NewsId } from 'application/models/News';
 import 'server-only';
 import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
 import { Bind, Cache } from 'application/decorators';
@@ -30,7 +30,7 @@ export class NewsRepository implements INewsRepository {
    */
   @Cache()
   @Bind()
-  async getNewsById(id: News['id']): Promise<Nullable<News>> {
+  async getNewsById(id: NewsId): Promise<Nullable<News>> {
     const query = 'SELECT * FROM news WHERE id = $1;';
     const { rows } = await DatabaseProvider.pool.query<INewsEntity>(query, [id]);
 
@@ -52,11 +52,10 @@ export class NewsRepository implements INewsRepository {
    * Маппинг сущности из БД к модели
    */
   private static entityToModel(entity: INewsEntity): News {
-    const news = new News();
-    news.date = entity.create_date;
-    news.id = entity.id;
-    news.name = entity.title;
-    news.content = entity.content;
-    return news;
+    return new News()
+      .setId(entity.id)
+      .setName(entity.title)
+      .setContent(entity.content)
+      .setDate(entity.create_date);
   }
 }

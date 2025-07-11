@@ -17,7 +17,7 @@ const { checkUserExistsByLogin, createUser } = userRepository();
 const { sign } = jwtService();
 
 export async function register(payload: FormData): Promise<IActionResult> {
-  const login = payload.get('login') as string;
+  const login = (payload.get('login') as string)?.trim();
   const password = payload.get('password') as string;
 
   const validationResult = validatePayload(login, password);
@@ -34,7 +34,7 @@ export async function register(payload: FormData): Promise<IActionResult> {
 
   const hashedPassword = await bcrypt.hash(password, PASSWORD_HASH_ROUNDS);
 
-  const user = await createUser(login.trim(), hashedPassword);
+  const user = await createUser(login, hashedPassword);
 
   const jwtToken = sign({ id: user.id, login: user.login });
 

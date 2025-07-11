@@ -1,4 +1,4 @@
-import { Category } from 'application/models/Category';
+import { Category, CategoryId } from 'application/models/Category';
 import { Container, Token } from 'typedi';
 
 export interface ICategoryRepository {
@@ -10,7 +10,7 @@ export interface ICategoryRepository {
   /**
    * Получение категории по идентификатору
    */
-  getCategoryById(id: Category['id']): Promise<Nullable<Category>>;
+  getCategoryById(id: CategoryId): Promise<Nullable<Category>>;
 }
 
 export const CATEGORY_REPOSITORY = new Token<ICategoryRepository>();

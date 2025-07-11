@@ -1,5 +1,5 @@
 import { CATEGORY_REPOSITORY, ICategoryRepository } from 'application/abstractions/repositories';
-import { Category } from 'application/models/Category';
+import { Category, type CategoryId } from 'application/models/Category';
 import { Service } from 'typedi';
 import 'server-only';
 import { Bind, Cache } from 'application/decorators';
@@ -44,7 +44,7 @@ export class CategoryRepository implements ICategoryRepository {
    */
   @Cache()
   @Bind()
-  async getCategoryById(id: Category['id']): Promise<Nullable<Category>> {
+  async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {
     const query = `
       SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words
       FROM categories AS c

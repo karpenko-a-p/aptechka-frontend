@@ -28,7 +28,7 @@ export class User {
   }
 
   set id(value: Nilable<UserId>) {
-    if (isInteger(value)) this._id = value;
+    if (isInteger(value)) this._id = value as UserId;
   }
 
   set login(value: Nilable<UserLogin>) {

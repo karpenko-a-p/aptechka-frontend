@@ -17,7 +17,7 @@ const { getUserWithPasswordByLogin } = userRepository();
 const { sign } = jwtService();
 
 export async function login(payload: FormData): Promise<IActionResult> {
-  const formLogin = payload.get('login') as string;
+  const formLogin = (payload.get('login') as string)?.trim();
   const password = payload.get('password') as string;
 
   const validationResult = validatePayload(formLogin, password);

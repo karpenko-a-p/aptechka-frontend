@@ -1,5 +1,5 @@
 import { Container, Token } from 'typedi';
-import { News } from 'application/models/News';
+import { News, NewsId } from 'application/models/News';
 
 export interface INewsRepository {
   /**
@@ -15,7 +15,7 @@ export interface INewsRepository {
   /**
    * Получение новости по идентификатору
    */
-  getNewsById(id: News['id']): Promise<Nullable<News>>;
+  getNewsById(id: NewsId): Promise<Nullable<News>>;
 }
 
 export const NEWS_REPOSITORY = new Token<INewsRepository>();
