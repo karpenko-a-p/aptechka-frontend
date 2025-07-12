@@ -1,7 +1,6 @@
-import { IUserRepository, USER_REPOSITORY } from 'application/abstractions/repositories';
 import { User, type UserId, type UserLogin, type UserPassword } from 'application/models/User';
 import { Service } from 'typedi';
-import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
 import { Cache, Bind } from 'application/decorators';
 
 interface IUserEntity {
@@ -10,8 +9,8 @@ interface IUserEntity {
   password: string;
 }
 
-@Service(USER_REPOSITORY)
-export class UserRepository implements IUserRepository {
+@Service()
+export class UserRepository {
   /**
    * @inheritDoc
    */

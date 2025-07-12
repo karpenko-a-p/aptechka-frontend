@@ -1,9 +1,8 @@
-import { IProductRepository, PRODUCT_REPOSITORY } from 'application/abstractions/repositories';
 import { Category } from 'application/models/Category';
 import { Product } from 'application/models/Product';
 import { Service } from 'typedi';
 import 'server-only';
-import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
 import { Bind, Cache } from 'application/decorators';
 
 interface IProductEntity {
@@ -13,8 +12,8 @@ interface IProductEntity {
   category_id: string;
 }
 
-@Service(PRODUCT_REPOSITORY)
-export class ProductRepository implements IProductRepository {
+@Service()
+export class ProductRepository {
   /**
    * Запрос для получения продукта по идентификатору
    */

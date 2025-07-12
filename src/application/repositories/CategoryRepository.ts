@@ -1,9 +1,8 @@
-import { CATEGORY_REPOSITORY, ICategoryRepository } from 'application/abstractions/repositories';
 import { Category, type CategoryId } from 'application/models/Category';
 import { Service } from 'typedi';
 import 'server-only';
 import { Bind, Cache } from 'application/decorators';
-import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
 
 interface ICategoryEntity {
   id: string;
@@ -16,8 +15,8 @@ interface ICategoryWithKeyWordsEntity extends ICategoryEntity {
   key_words: string;
 }
 
-@Service(CATEGORY_REPOSITORY)
-export class CategoryRepository implements ICategoryRepository {
+@Service()
+export class CategoryRepository {
   /**
    * Получение списка всех категорий
    */

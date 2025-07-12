@@ -1,26 +1,25 @@
-import { INewsRepository, NEWS_REPOSITORY } from 'application/abstractions/repositories';
 import { Service } from 'typedi';
 import { News, type NewsId } from 'application/models/News';
 import 'server-only';
-import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
 import { Bind, Cache } from 'application/decorators';
 
 interface INewsEntity {
-  id: number;
+  id: string;
   title: string;
   content: string;
   create_date: Date;
 }
 
-@Service(NEWS_REPOSITORY)
-export class NewsRepository implements INewsRepository {
+@Service()
+export class NewsRepository {
   /**
    * @inheritDoc
    */
   @Cache()
   @Bind()
   async getNews(): Promise<News[]> {
-    const query = 'SELECT * FROM news LIMIT 5;';
+    const query = 'SELECT id::integer, * FROM news LIMIT 5;';
     const { rows } = await DatabaseProvider.pool.query<INewsEntity>(query);
     return rows.map(NewsRepository.entityToModel);
   }
@@ -53,7 +52,7 @@ export class NewsRepository implements INewsRepository {
    */
   private static entityToModel(entity: INewsEntity): News {
     return new News()
-      .setId(entity.id)
+      .setId(Number(entity.id))
       .setName(entity.title)
       .setContent(entity.content)
       .setDate(entity.create_date);

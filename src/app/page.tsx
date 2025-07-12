@@ -1,16 +1,17 @@
 import { IconCheck, IconComet, IconThumbUp } from '@tabler/icons-react';
 import Link from 'next/link';
-import { userRepository, categoryRepository, newsRepository } from 'application/abstractions/repositories';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import { type JSX } from 'react';
 import { UserInformation } from 'presentation/components/UserInformation';
 import { UserLogin } from 'presentation/components/UserLogin';
 import { parseJwtToken } from 'application/use-cases/parseJwtToken';
+import { Container } from 'typedi';
+import { CategoryRepository, NewsRepository, UserRepository } from 'application/repositories';
 
-const { getCategories } = categoryRepository();
-const { getNewUsersDiscount, getNews } = newsRepository();
-const { getUserById } = userRepository();
+const { getCategories } = Container.get(CategoryRepository);
+const { getNewUsersDiscount, getNews } = Container.get(NewsRepository);
+const { getUserById } = Container.get(UserRepository);
 
 export const revalidate = 3600;
 

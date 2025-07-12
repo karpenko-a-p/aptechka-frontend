@@ -1,12 +1,13 @@
 import { parseJwtToken } from 'application/use-cases/parseJwtToken';
 import { redirect } from 'next/navigation';
-import { userRepository } from 'application/abstractions/repositories';
 import { ExitButton } from 'src/app/profile/ExitButton';
 import Link from 'next/link';
 import type { JSX } from 'react';
 import { IconShoppingCart } from '@tabler/icons-react';
+import { Container } from 'typedi';
+import { UserRepository } from 'application/repositories';
 
-const { getUserById } = userRepository();
+const { getUserById } = Container.get(UserRepository);
 
 export const revalidate = 0;
 

@@ -1,10 +1,9 @@
-import { Inject, Service } from 'typedi';
-import { COUNTER_STORE, type ICounterStore } from 'application/abstractions/stores';
+import { Service } from 'typedi';
+import { CounterStore } from 'application/stores';
 
 @Service()
 export class ViewModel {
-  @Inject(COUNTER_STORE)
-  private readonly counterStore!: ICounterStore;
+  constructor(private readonly counterStore: CounterStore) {}
 
   /**
    * Получение значение счетчика из глобального стора

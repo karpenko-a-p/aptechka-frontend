@@ -1,6 +1,4 @@
 import 'reflect-metadata';
-import 'infrastructure/services';
-import 'infrastructure/repositories';
 import type { Metadata } from 'next';
 import 'presentation/ui/variables/tailwindcss.css';
 import { Providers } from 'presentation/components/Providers';

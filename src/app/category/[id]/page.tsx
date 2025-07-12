@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
-import { categoryRepository, productRepository } from 'application/abstractions/repositories';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { type JSX } from 'react';
+import { Container } from 'typedi';
+import { CategoryRepository, ProductRepository } from 'application/repositories';
 
-const { getCategoryById } = categoryRepository();
-const { getProductsByCategoryId } = productRepository();
+const { getCategoryById } = Container.get(CategoryRepository);
+const { getProductsByCategoryId } = Container.get(ProductRepository);
 
 export const revalidate = 300;
 

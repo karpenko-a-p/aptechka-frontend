@@ -3,10 +3,10 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useService } from 'presentation/hooks/useService';
-import { COUNTER_STORE } from 'application/abstractions/stores';
+import { CounterStore } from 'application/stores';
 
 export const Counter = observer(() => {
-  const { getCount, increment, decrement } = useService(COUNTER_STORE);
+  const { getCount, increment, decrement } = useService(CounterStore);
 
   return (
     <div className="flex gap-4 items-center">

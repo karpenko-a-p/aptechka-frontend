@@ -1,12 +1,21 @@
-import { IJwtService, type IJwtTokenPayload, JWT_SERVICE } from 'application/abstractions/services';
 import { Service } from 'typedi';
 import { default as jwt } from 'jsonwebtoken';
 import { AUTHORIZATION_EXPIRES } from 'application/constants/auth';
 import { Environment } from 'application/utils/Environment';
 import { Bind } from 'application/decorators';
+import { User } from 'application/models/User';
 
-@Service(JWT_SERVICE)
-export class JwtService implements IJwtService {
+export interface IJwtTokenPayload {
+  id: User['id'];
+  login: User['login'];
+  iat: number;
+  exp: number;
+  aud: string;
+  iss: string;
+}
+
+@Service()
+export class JwtService {
   /**
    * @inheritDoc
    */
