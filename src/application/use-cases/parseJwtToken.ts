@@ -5,9 +5,10 @@ import {
   AUTHORIZATION_REVALIDATION_TIME
 } from 'application/constants/auth';
 import { cookies } from 'next/headers';
-import { IJwtTokenPayload, jwtService } from 'application/abstractions/services';
+import { Container } from 'typedi';
+import { JwtService, IJwtTokenPayload } from 'application/services';
 
-const { getTokenPayload, sign } = jwtService();
+const { getTokenPayload, sign } = Container.get(JwtService);
 
 /**
  * Получение информации по пользователю из токена

@@ -1,7 +1,6 @@
 'use client';
 
 import 'reflect-metadata';
-import 'infrastructure/stores';
 import React, { FC } from 'react';
 import { enableStaticRendering } from 'mobx-react-lite';
 import { IS_SERVER } from 'application/constants/side';

@@ -1,20 +1,19 @@
 'use server';
 
 import 'reflect-metadata';
-import 'infrastructure/services';
-import 'infrastructure/repositories';
 import 'server-only';
 import { IActionResult } from 'application/abstractions/utils/IActionResult';
 import { cookies } from 'next/headers';
 import { LoginResult } from 'application/actions/login.constants';
-import { userRepository } from 'application/abstractions/repositories';
 import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'application/constants/auth';
-import { jwtService } from 'application/abstractions/services';
 import { User } from 'application/models/User';
+import { Container } from 'typedi';
+import { UserRepository } from 'application/repositories';
+import { JwtService } from 'application/services';
 
-const { getUserWithPasswordByLogin } = userRepository();
-const { sign } = jwtService();
+const { getUserWithPasswordByLogin } = Container.get(UserRepository);
+const { sign } = Container.get(JwtService);
 
 export async function login(payload: FormData): Promise<IActionResult> {
   const formLogin = (payload.get('login') as string)?.trim();

@@ -6,15 +6,16 @@ import 'infrastructure/repositories';
 import 'server-only';
 import { IActionResult } from 'application/abstractions/utils';
 import { RegisterResult } from 'application/actions/register.constants';
-import { userRepository } from 'application/abstractions/repositories';
 import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'application/constants/auth';
 import { cookies } from 'next/headers';
-import { jwtService } from 'application/abstractions/services';
 import { User } from 'application/models/User';
+import { Container } from 'typedi';
+import { UserRepository } from 'application/repositories';
+import { JwtService } from 'application/services';
 
-const { checkUserExistsByLogin, createUser } = userRepository();
-const { sign } = jwtService();
+const { checkUserExistsByLogin, createUser } = Container.get(UserRepository);
+const { sign } = Container.get(JwtService);
 
 export async function register(payload: FormData): Promise<IActionResult> {
   const login = (payload.get('login') as string)?.trim();

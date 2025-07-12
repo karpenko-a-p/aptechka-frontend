@@ -1,9 +1,8 @@
-import { COUNTER_STORE, ICounterStore } from 'application/abstractions/stores';
 import { Service } from 'typedi';
 import { makeAutoObservable } from 'mobx';
 
-@Service(COUNTER_STORE)
-export class CounterStore implements ICounterStore {
+@Service()
+export class CounterStore {
   /**
    * Счетчик
    */

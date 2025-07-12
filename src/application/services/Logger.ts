@@ -1,8 +1,7 @@
-import { ILogger, LOGGER } from 'application/abstractions/services';
 import { Service } from 'typedi';
 
-@Service(LOGGER)
-export class Logger implements ILogger {
+@Service()
+export class Logger {
   log(...args: unknown[]): void {
     console.log(`LOG [${new Date().toISOString()}]:`, ...args);
   }

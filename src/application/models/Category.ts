@@ -1,4 +1,4 @@
-import { isArray, isNumber, isString } from 'lodash';
+import { isArray, isString } from 'lodash';
 
 export type CategoryId = string;
 export type CategoryName = string;
@@ -34,7 +34,7 @@ export class Category {
   }
 
   set id(value: Nilable<CategoryId>) {
-    if (isNumber(value)) this._id = value;
+    if (isString(value)) this._id = value;
   }
 
   set name(value: Nilable<CategoryName>) {
