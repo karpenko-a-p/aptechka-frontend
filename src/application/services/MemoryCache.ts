@@ -1,5 +1,4 @@
 import { Service } from 'typedi';
-import { Bind } from 'application/decorators';
 import 'server-only';
 
 class CachedValue {
@@ -38,12 +37,10 @@ export class MemoryCache {
     return Date.now() + 1000 * 60 * 60 * 24 * days;
   }
 
-  @Bind()
   has(key: string): boolean {
     return this.cache.has(key);
   }
 
-  @Bind()
   get<TValue>(key: string): Nullable<TValue> {
     const cachedValue = this.cache.get(key);
 
@@ -57,26 +54,22 @@ export class MemoryCache {
     return cachedValue.value as TValue;
   }
 
-  @Bind()
   set(key: string, value: unknown, expiresAt?: number, tags?: string[]): void {
     const cachedValue = new CachedValue(value, expiresAt ?? this.cacheForMinutes(10), tags ?? []);
 
     if (!cachedValue.expired) this.cache.set(key, cachedValue);
   }
 
-  @Bind()
   deleteByKey(key: string): void {
     this.cache.delete(key);
   }
 
-  @Bind()
   deleteByTag(tag: string): void {
     this.cache.entries().forEach(([key, cachedValue]) => {
       if (cachedValue.hasTag(tag)) this.deleteByKey(key);
     });
   }
 
-  @Bind()
   invalidate(): void {
     this.cache.entries().forEach(([key, cachedValue]) => {
       if (cachedValue.expired) this.deleteByKey(key);
