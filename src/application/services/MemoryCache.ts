@@ -22,7 +22,7 @@ export class MemoryCache {
   private readonly cache = new Map<string, CachedValue>();
 
   constructor() {
-    setInterval(this.invalidate, 60_000);
+    setInterval(() => this.invalidate(), 60_000);
   }
 
   cacheForMinutes(minutes: number): number {
