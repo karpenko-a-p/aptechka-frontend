@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import 'infrastructure/services';
 import 'infrastructure/repositories';
 import 'server-only';
-import { IActionResult } from 'application/abstractions/utils';
+import { ActionResult, IActionResult } from 'application/utils/ActionResult';
 import { RegisterResult } from 'application/actions/register.constants';
 import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'application/constants/auth';
@@ -14,8 +14,8 @@ import { Container } from 'typedi';
 import { UserRepository } from 'application/repositories';
 import { JwtService } from 'application/services';
 
-const { checkUserExistsByLogin, createUser } = Container.get(UserRepository);
-const { sign } = Container.get(JwtService);
+const userRepository = Container.get(UserRepository);
+const jwtService = Container.get(JwtService);
 
 export async function register(payload: FormData): Promise<IActionResult> {
   const login = (payload.get('login') as string)?.trim();
@@ -25,19 +25,19 @@ export async function register(payload: FormData): Promise<IActionResult> {
 
   // Ошибка валидации
   if (validationResult.length)
-    return { code: RegisterResult.ValidationFailure, payload: validationResult };
+    return new ActionResult(RegisterResult.ValidationFailure, validationResult);
 
-  const exists = await checkUserExistsByLogin(login);
+  const exists = await userRepository.checkUserExistsByLogin(login);
 
   // Пользователь с таокй почтой уже существует
   if (exists)
-    return { code: RegisterResult.EmailAlreadyInUse, payload: null };
+    return new ActionResult(RegisterResult.EmailAlreadyInUse, null);
 
   const hashedPassword = await bcrypt.hash(password, PASSWORD_HASH_ROUNDS);
 
-  const user = await createUser(login, hashedPassword);
+  const user = await userRepository.createUser(login, hashedPassword);
 
-  const jwtToken = sign({ id: user.id, login: user.login });
+  const jwtToken = jwtService.sign({ id: user.id, login: user.login });
 
   const cookie = await cookies();
 
@@ -48,7 +48,7 @@ export async function register(payload: FormData): Promise<IActionResult> {
   });
 
   // Успешная регистрация
-  return { code: RegisterResult.Success, payload: null };
+  return new ActionResult(RegisterResult.Success, null);
 }
 
 function validatePayload(login: string, password: string): string[] {

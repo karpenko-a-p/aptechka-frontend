@@ -1,4 +1,4 @@
-import { IActionResult } from 'application/abstractions/utils';
+import { IActionResult } from 'application/utils/ActionResult';
 
 export const enum LoginResult {
   Success,

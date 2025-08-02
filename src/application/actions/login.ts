@@ -2,7 +2,7 @@
 
 import 'reflect-metadata';
 import 'server-only';
-import { IActionResult } from 'application/abstractions/utils/IActionResult';
+import { ActionResult, IActionResult } from 'application/utils/ActionResult';
 import { cookies } from 'next/headers';
 import { LoginResult } from 'application/actions/login.constants';
 import bcrypt from 'bcrypt';
@@ -12,8 +12,8 @@ import { Container } from 'typedi';
 import { UserRepository } from 'application/repositories';
 import { JwtService } from 'application/services';
 
-const { getUserWithPasswordByLogin } = Container.get(UserRepository);
-const { sign } = Container.get(JwtService);
+const userRepository = Container.get(UserRepository);
+const jwtService = Container.get(JwtService);
 
 export async function login(payload: FormData): Promise<IActionResult> {
   const formLogin = (payload.get('login') as string)?.trim();
@@ -23,21 +23,21 @@ export async function login(payload: FormData): Promise<IActionResult> {
 
   // Ошибка валидации
   if (validationResult.length)
-    return { code: LoginResult.ValidationFailure, payload: validationResult };
+    return new ActionResult(LoginResult.ValidationFailure, validationResult);
 
-  const user = await getUserWithPasswordByLogin(formLogin);
+  const user = await userRepository.getUserWithPasswordByLogin(formLogin);
 
   // Пользователь не найден
   if (!user)
-    return { code: LoginResult.InvalidLoginOrPassword, payload: null };
+    return new ActionResult(LoginResult.InvalidLoginOrPassword, null);
 
   const passwordVerified = await bcrypt.compare(password, user.password);
 
   // Пароли не совпали
   if (!passwordVerified)
-    return { code: LoginResult.InvalidLoginOrPassword, payload: null };
+    return new ActionResult(LoginResult.InvalidLoginOrPassword, null);
 
-  const jwtToken = sign({ id: user.id, login: user.login });
+  const jwtToken = jwtService.sign({ id: user.id, login: user.login });
 
   const cookie = await cookies();
 
@@ -48,7 +48,7 @@ export async function login(payload: FormData): Promise<IActionResult> {
   });
 
   // Успешная авторизация
-  return { code: LoginResult.Success, payload: null };
+  return new ActionResult(LoginResult.Success, null);
 }
 
 function validatePayload(login: string, password: string): string[] {
