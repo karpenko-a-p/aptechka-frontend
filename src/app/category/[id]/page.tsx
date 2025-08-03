@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { type JSX } from 'react';
 import { Container } from 'typedi';
-import { CategoryRepository, ProductRepository } from 'application/repositories';
+import { CategoryRepository, ProductRepository } from 'infrastructure/repositories';
 
 const { getCategoryById } = Container.get(CategoryRepository);
 const { getProductsByCategoryId } = Container.get(ProductRepository);

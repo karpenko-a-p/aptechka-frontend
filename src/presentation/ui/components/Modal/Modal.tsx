@@ -4,7 +4,7 @@ import React, { FC, HTMLAttributes, ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTransition } from 'presentation/hooks';
 import cn from 'clsx';
-import { IS_SERVER } from 'application/constants/side';
+import { IS_SERVER } from 'infrastructure/constants/side';
 
 export type ModalProps = HTMLAttributes<HTMLDivElement> & {
   /**

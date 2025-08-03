@@ -1,7 +1,7 @@
-import { User, type UserId, type UserLogin, type UserPassword } from 'application/models/User';
+import { User, type UserId, type UserLogin, type UserPassword } from 'infrastructure/models/User';
 import { Service } from 'typedi';
-import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
-import { Cache, Bind } from 'application/decorators';
+import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { Cache, Bind } from 'infrastructure/decorators';
 
 interface IUserEntity {
   id: number;
@@ -11,9 +11,6 @@ interface IUserEntity {
 
 @Service()
 export class UserRepository {
-  /**
-   * @inheritDoc
-   */
   @Bind()
   async checkUserExistsByLogin(login: UserLogin): Promise<boolean> {
     const query = 'SELECT 1 FROM users AS u WHERE u.login = $1;';
@@ -21,9 +18,6 @@ export class UserRepository {
     return !!rowCount;
   }
 
-  /**
-   * @inheritDoc
-   */
   @Bind()
   async createUser(login: UserLogin, password: UserPassword): Promise<User> {
     const query = 'INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *;';
@@ -31,9 +25,6 @@ export class UserRepository {
     return UserRepository.entityToModel(rows[0]);
   }
 
-  /**
-   * @inheritDoc
-   */
   @Cache()
   @Bind()
   async getUserById(id: UserId): Promise<Nullable<User>> {
@@ -42,18 +33,12 @@ export class UserRepository {
     return rows[0] ? UserRepository.entityToModel(rows[0]) : null;
   }
 
-  /**
-   * @inheritDoc
-   */
   @Bind()
   async deleteUserById(id: UserId): Promise<void> {
     const query = 'DELETE FROM users AS u WHERE u.id = $1;';
     await DatabaseProvider.pool.query(query, [id]);
   }
 
-  /**
-   * @inheritDoc
-   */
   @Bind()
   async getUserWithPasswordByLogin(login: UserLogin): Promise<Nullable<User>> {
     const query = 'SELECT * FROM users AS u WHERE u.login = $1;';

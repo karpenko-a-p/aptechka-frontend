@@ -6,9 +6,9 @@ import Link from 'next/link';
 import type { JSX } from 'react';
 import { useBoolean } from 'presentation/hooks';
 import { FormEvent, useState, useTransition } from 'react';
-import { login } from 'application/actions/login';
+import { login } from 'infrastructure/actions/login';
 import { useRouter } from 'next/navigation';
-import { isInvalidLoginOrPassword, isLoginSuccess, isLoginValidationError } from 'application/actions/login.constants';
+import { isInvalidLoginOrPassword, isLoginSuccess, isLoginValidationError } from 'infrastructure/actions/login.constants';
 
 export default function Page(): JSX.Element {
   const { value: showPassword, toggle } = useBoolean();

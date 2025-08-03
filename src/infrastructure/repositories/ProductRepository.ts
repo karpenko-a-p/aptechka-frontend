@@ -1,9 +1,9 @@
-import { Category } from 'application/models/Category';
-import { Product } from 'application/models/Product';
+import { Category } from 'infrastructure/models/Category';
+import { Product } from 'infrastructure/models/Product';
 import { Service } from 'typedi';
 import 'server-only';
-import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
-import { Bind, Cache } from 'application/decorators';
+import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { Bind, Cache } from 'infrastructure/decorators';
 
 interface IProductEntity {
   id: number;
@@ -21,9 +21,6 @@ export class ProductRepository {
     SELECT * FROM products WHERE id = $1
   `);
 
-  /**
-   * @inheritDoc
-   */
   @Cache()
   @Bind()
   async getProductById(id: Product['id']): Promise<Nullable<Product>> {
@@ -41,9 +38,6 @@ export class ProductRepository {
     SELECT * FROM products WHERE category_id = $1;
   `);
 
-  /**
-   * @inheritDoc
-   */
   @Cache()
   @Bind()
   async getProductsByCategoryId(id: Category['id']): Promise<Product[]> {

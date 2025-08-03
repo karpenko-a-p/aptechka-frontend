@@ -1,8 +1,8 @@
-import { Category, type CategoryId } from 'application/models/Category';
+import { Category, type CategoryId } from 'infrastructure/models/Category';
 import { Service } from 'typedi';
 import 'server-only';
-import { Bind, Cache } from 'application/decorators';
-import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
+import { Bind, Cache } from 'infrastructure/decorators';
+import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
 
 interface ICategoryEntity {
   id: string;
@@ -28,9 +28,6 @@ export class CategoryRepository {
     ORDER BY c.id;
   `);
 
-  /**
-   * @inheritDoc
-   */
   @Cache()
   @Bind()
   async getCategories(): Promise<Category[]> {
@@ -38,9 +35,6 @@ export class CategoryRepository {
     return rows.map(CategoryRepository.entityToModel);
   }
 
-  /**
-   * @inheritDoc
-   */
   @Cache()
   @Bind()
   async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {

@@ -7,12 +7,12 @@ import { type JSX } from 'react';
 import { useBoolean } from 'presentation/hooks';
 import { FormEvent, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { register } from 'application/actions/register';
+import { register } from 'infrastructure/actions/register';
 import {
   isRegisterEmailAlreadyInUse,
   isRegisterSuccess,
   isRegisterValidationError,
-} from 'application/actions/register.constants';
+} from 'infrastructure/actions/register.constants';
 
 export default function Page(): JSX.Element {
   const { value: showPassword, toggle } = useBoolean();

@@ -1,13 +1,13 @@
-import { parseJwtToken } from 'application/use-cases/parseJwtToken';
+import { parseJwtToken } from 'infrastructure/use-cases/parseJwtToken';
 import { redirect } from 'next/navigation';
 import { ExitButton } from 'src/app/profile/ExitButton';
 import Link from 'next/link';
 import type { JSX } from 'react';
 import { IconShoppingCart } from '@tabler/icons-react';
 import { Container } from 'typedi';
-import { UserRepository } from 'application/repositories';
+import { UserRepository } from 'infrastructure/repositories';
 
-const { getUserById } = Container.get(UserRepository);
+const userRepository = Container.get(UserRepository);
 
 export const revalidate = 0;
 
@@ -20,7 +20,7 @@ export default async function Page(): Promise<JSX.Element> {
   if (!tokenPayload)
     redirect('/login');
 
-  const user = await getUserById(tokenPayload.id);
+  const user = await userRepository.getUserById(tokenPayload.id);
 
   if (!user)
     redirect('/register');

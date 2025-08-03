@@ -1,9 +1,9 @@
 import { Service } from 'typedi';
 import { default as jwt } from 'jsonwebtoken';
-import { AUTHORIZATION_EXPIRES } from 'application/constants/auth';
-import { Environment } from 'application/utils/Environment';
-import { Bind } from 'application/decorators';
-import { UserLogin, UserId } from 'application/models/User';
+import { AUTHORIZATION_EXPIRES } from 'infrastructure/constants/auth';
+import { Environment } from 'infrastructure/utils/Environment';
+import { Bind } from 'infrastructure/decorators';
+import { UserLogin, UserId } from 'infrastructure/models/User';
 
 export interface IJwtTokenPayload {
   id: UserId;

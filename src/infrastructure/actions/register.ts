@@ -1,18 +1,16 @@
 'use server';
 
 import 'reflect-metadata';
-import 'infrastructure/services';
-import 'infrastructure/repositories';
 import 'server-only';
-import { ActionResult, IActionResult } from 'application/utils/ActionResult';
-import { RegisterResult } from 'application/actions/register.constants';
+import { ActionResult, IActionResult } from 'infrastructure/utils/ActionResult';
+import { RegisterResult } from 'infrastructure/actions/register.constants';
 import bcrypt from 'bcrypt';
-import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'application/constants/auth';
+import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'infrastructure/constants/auth';
 import { cookies } from 'next/headers';
-import { User } from 'application/models/User';
+import { User } from 'infrastructure/models/User';
 import { Container } from 'typedi';
-import { UserRepository } from 'application/repositories';
-import { JwtService } from 'application/services';
+import { UserRepository } from 'infrastructure/repositories';
+import { JwtService } from 'infrastructure/services';
 
 const userRepository = Container.get(UserRepository);
 const jwtService = Container.get(JwtService);

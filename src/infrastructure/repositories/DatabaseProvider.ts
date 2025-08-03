@@ -1,5 +1,5 @@
 import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
-import { Environment } from 'application/utils/Environment';
+import { Environment } from 'infrastructure/utils/Environment';
 
 export class DatabaseProvider {
   /**

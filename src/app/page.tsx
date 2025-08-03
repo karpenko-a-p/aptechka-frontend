@@ -5,18 +5,21 @@ import { Metadata } from 'next';
 import { type JSX } from 'react';
 import { UserInformation } from 'presentation/components/UserInformation';
 import { UserLogin } from 'presentation/components/UserLogin';
-import { parseJwtToken } from 'application/use-cases/parseJwtToken';
+import { parseJwtToken } from 'infrastructure/use-cases/parseJwtToken';
 import { Container } from 'typedi';
-import { CategoryRepository, NewsRepository, UserRepository } from 'application/repositories';
+import { CategoryRepository, NewsRepository, UserRepository } from 'infrastructure/repositories';
 
-const { getCategories } = Container.get(CategoryRepository);
-const { getNewUsersDiscount, getNews } = Container.get(NewsRepository);
-const { getUserById } = Container.get(UserRepository);
+const categoryRepository = Container.get(CategoryRepository);
+const newsRepository = Container.get(NewsRepository);
+const userRepository = Container.get(UserRepository);
 
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [categories, discount] = await Promise.all([getCategories(), getNewUsersDiscount()]);
+  const [categories, discount] = await Promise.all([
+    categoryRepository.getCategories(),
+    newsRepository.getNewUsersDiscount(),
+  ]);
 
   return {
     title: 'Аптечка | Добро пожаловать',
@@ -32,18 +35,16 @@ export default async function Page(): Promise<JSX.Element> {
   const tokenPayload = await parseJwtToken();
 
   const [categories, discount, news, user] = await Promise.all([
-    getCategories(),
-    getNewUsersDiscount(),
-    getNews(),
-    tokenPayload ? getUserById(tokenPayload.id) : Promise.resolve(null),
+    categoryRepository.getCategories(),
+    newsRepository.getNewUsersDiscount(),
+    newsRepository.getNews(),
+    tokenPayload ? userRepository.getUserById(tokenPayload.id) : Promise.resolve(null),
   ]);
 
   return (
     <div className="flex grow flex-col container mt-4">
       <div className="flex items-center mb-4 gap-10 max-mobile:gap-4 justify-between">
-        <h1 className="logo">
-          Аптечка
-        </h1>
+        <h1 className="logo">Аптечка</h1>
 
         {user ? <UserInformation user={user} /> : <UserLogin />}
       </div>

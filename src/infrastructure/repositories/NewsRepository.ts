@@ -1,8 +1,8 @@
 import { Service } from 'typedi';
-import { News, type NewsId } from 'application/models/News';
+import { News, type NewsId } from 'infrastructure/models/News';
 import 'server-only';
-import { DatabaseProvider } from 'application/repositories/DatabaseProvider';
-import { Bind, Cache } from 'application/decorators';
+import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
+import { Bind, Cache } from 'infrastructure/decorators';
 
 interface INewsEntity {
   id: string;
@@ -13,9 +13,6 @@ interface INewsEntity {
 
 @Service()
 export class NewsRepository {
-  /**
-   * @inheritDoc
-   */
   @Cache()
   @Bind()
   async getNews(): Promise<News[]> {
@@ -24,9 +21,6 @@ export class NewsRepository {
     return rows.map(NewsRepository.entityToModel);
   }
 
-  /**
-   * @inheritDoc
-   */
   @Cache()
   @Bind()
   async getNewsById(id: NewsId): Promise<Nullable<News>> {
@@ -39,9 +33,6 @@ export class NewsRepository {
     return NewsRepository.entityToModel(rows[0]);
   }
 
-  /**
-   * @inheritDoc
-   */
   @Bind()
   getNewUsersDiscount(): Promise<number> {
     return Promise.resolve(10);

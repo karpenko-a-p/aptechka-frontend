@@ -2,15 +2,15 @@
 
 import 'reflect-metadata';
 import 'server-only';
-import { ActionResult, IActionResult } from 'application/utils/ActionResult';
+import { ActionResult, IActionResult } from 'infrastructure/utils/ActionResult';
 import { cookies } from 'next/headers';
-import { LoginResult } from 'application/actions/login.constants';
+import { LoginResult } from 'infrastructure/actions/login.constants';
 import bcrypt from 'bcrypt';
-import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'application/constants/auth';
-import { User } from 'application/models/User';
+import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'infrastructure/constants/auth';
+import { User } from 'infrastructure/models/User';
 import { Container } from 'typedi';
-import { UserRepository } from 'application/repositories';
-import { JwtService } from 'application/services';
+import { UserRepository } from 'infrastructure/repositories';
+import { JwtService } from 'infrastructure/services';
 
 const userRepository = Container.get(UserRepository);
 const jwtService = Container.get(JwtService);

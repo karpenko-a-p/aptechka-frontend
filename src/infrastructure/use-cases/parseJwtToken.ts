@@ -3,12 +3,12 @@ import {
   AUTHORIZATION_COOKIE_NAME,
   AUTHORIZATION_EXPIRES,
   AUTHORIZATION_REVALIDATION_TIME
-} from 'application/constants/auth';
+} from 'infrastructure/constants/auth';
 import { cookies } from 'next/headers';
 import { Container } from 'typedi';
-import { JwtService, IJwtTokenPayload } from 'application/services';
+import { JwtService, IJwtTokenPayload } from 'infrastructure/services';
 
-const { getTokenPayload, sign } = Container.get(JwtService);
+const jwtService = Container.get(JwtService);
 
 /**
  * Получение информации по пользователю из токена
@@ -20,14 +20,14 @@ export async function parseJwtToken(): Promise<Nullable<IJwtTokenPayload>> {
   if (!jwtToken)
     return null;
 
-  const tokenPayload = getTokenPayload(jwtToken);
+  const tokenPayload = jwtService.getTokenPayload(jwtToken);
 
   if(!tokenPayload)
     return null;
 
   // Обноление токена если ему осталось жить меньше 2-х дней
   if (tokenPayload.exp <= Date.now() + AUTHORIZATION_REVALIDATION_TIME) {
-    const jwtToken = sign({ id: tokenPayload.id, login: tokenPayload.login });
+    const jwtToken = jwtService.sign({ id: tokenPayload.id, login: tokenPayload.login });
 
     cookie.set(AUTHORIZATION_COOKIE_NAME, jwtToken, {
       httpOnly: true,

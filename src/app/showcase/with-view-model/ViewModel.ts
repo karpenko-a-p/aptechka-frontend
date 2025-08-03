@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { CounterStore } from 'application/stores';
+import { CounterStore } from 'infrastructure/stores';
 
 @Service()
 export class ViewModel {

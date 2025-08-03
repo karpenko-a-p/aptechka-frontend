@@ -1,6 +1,6 @@
 import React, { JSX } from 'react';
 import { Container } from 'typedi';
-import { MemoryCache } from 'application/services';
+import { MemoryCache } from 'infrastructure/services';
 
 const memoryCache = Container.get(MemoryCache);
 

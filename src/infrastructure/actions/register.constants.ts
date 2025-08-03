@@ -1,4 +1,4 @@
-import { IActionResult } from 'application/utils/ActionResult';
+import { IActionResult } from 'infrastructure/utils/ActionResult';
 
 export const enum RegisterResult {
   Success,

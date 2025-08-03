@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { User } from 'application/models/User';
+import { User } from 'infrastructure/models/User';
 import { IconUser } from '@tabler/icons-react';
 import Link from 'next/link';
 

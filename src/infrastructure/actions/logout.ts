@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { AUTHORIZATION_COOKIE_NAME } from 'application/constants/auth';
+import { AUTHORIZATION_COOKIE_NAME } from 'infrastructure/constants/auth';
 import { redirect } from 'next/navigation';
 import 'server-only';
 
