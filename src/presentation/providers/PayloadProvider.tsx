@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import { createContext, type JSX, useContext } from 'react';
 
 const PayloadContext = createContext<unknown>(null);
 
@@ -13,6 +13,6 @@ export const usePayload = <TPayload = unknown,>(): TPayload => {
   return payload as TPayload;
 };
 
-export const PayloadProvider = <TPayload = unknown,>({ children, payload }: Children & { payload: TPayload }) => {
-  return <PayloadContext.Provider value={payload}>{children}</PayloadContext.Provider>;
+export const PayloadProvider = <TPayload = unknown,>(props: Children & { payload: TPayload }): JSX.Element => {
+  return <PayloadContext.Provider value={props.payload}>{props.children}</PayloadContext.Provider>;
 };

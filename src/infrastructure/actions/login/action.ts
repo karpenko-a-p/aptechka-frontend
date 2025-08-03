@@ -3,10 +3,10 @@
 import 'reflect-metadata';
 import 'server-only';
 import { ActionResult, IActionResult } from 'infrastructure/utils/ActionResult';
-import { RegisterResult } from 'infrastructure/actions/register.constants';
-import bcrypt from 'bcrypt';
-import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'infrastructure/constants/auth';
 import { cookies } from 'next/headers';
+import { LoginResult } from 'infrastructure/actions/login/constants';
+import bcrypt from 'bcrypt';
+import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'infrastructure/constants/auth';
 import { User } from 'infrastructure/models/User';
 import { Container } from 'typedi';
 import { UserRepository } from 'infrastructure/repositories';
@@ -15,25 +15,27 @@ import { JwtService } from 'infrastructure/services';
 const userRepository = Container.get(UserRepository);
 const jwtService = Container.get(JwtService);
 
-export async function register(payload: FormData): Promise<IActionResult> {
-  const login = (payload.get('login') as string)?.trim();
+export async function login(payload: FormData): Promise<IActionResult> {
+  const formLogin = (payload.get('login') as string)?.trim();
   const password = payload.get('password') as string;
 
-  const validationResult = validatePayload(login, password);
+  const validationResult = validatePayload(formLogin, password);
 
   // Ошибка валидации
   if (validationResult.length)
-    return new ActionResult(RegisterResult.ValidationFailure, validationResult);
+    return new ActionResult(LoginResult.ValidationFailure, validationResult);
 
-  const exists = await userRepository.checkUserExistsByLogin(login);
+  const user = await userRepository.getUserWithPasswordByLogin(formLogin);
 
-  // Пользователь с таокй почтой уже существует
-  if (exists)
-    return new ActionResult(RegisterResult.EmailAlreadyInUse, null);
+  // Пользователь не найден
+  if (!user)
+    return new ActionResult(LoginResult.InvalidLoginOrPassword, null);
 
-  const hashedPassword = await bcrypt.hash(password, PASSWORD_HASH_ROUNDS);
+  const passwordVerified = await bcrypt.compare(password, user.password);
 
-  const user = await userRepository.createUser(login, hashedPassword);
+  // Пароли не совпали
+  if (!passwordVerified)
+    return new ActionResult(LoginResult.InvalidLoginOrPassword, null);
 
   const jwtToken = jwtService.sign({ id: user.id, login: user.login });
 
@@ -45,8 +47,8 @@ export async function register(payload: FormData): Promise<IActionResult> {
     expires: Date.now() + AUTHORIZATION_EXPIRES,
   });
 
-  // Успешная регистрация
-  return new ActionResult(RegisterResult.Success, null);
+  // Успешная авторизация
+  return new ActionResult(LoginResult.Success, null);
 }
 
 function validatePayload(login: string, password: string): string[] {
