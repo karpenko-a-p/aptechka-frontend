@@ -5,13 +5,13 @@ import { type JSX } from 'react';
 import { Container } from 'typedi';
 import { CategoryRepository, ProductRepository } from 'infrastructure/repositories';
 
-const { getCategoryById } = Container.get(CategoryRepository);
-const { getProductsByCategoryId } = Container.get(ProductRepository);
+const categoryRepository = Container.get(CategoryRepository);
+const productRepository = Container.get(ProductRepository);
 
 export const revalidate = 300;
 
 export async function generateMetadata({ params }: RouteSegment<'id'>): Promise<Metadata> {
-  const category = await getCategoryById((await params).id);
+  const category = await categoryRepository.getCategoryById((await params).id);
 
   if (!category) notFound();
 
@@ -24,7 +24,11 @@ export async function generateMetadata({ params }: RouteSegment<'id'>): Promise<
 
 export default async function Page({ params }: RouteSegment<'id'>): Promise<JSX.Element> {
   const categoryId = (await params).id;
-  const [category, products] = await Promise.all([getCategoryById(categoryId), getProductsByCategoryId(categoryId)]);
+
+  const [category, products] = await Promise.all([
+    categoryRepository.getCategoryById(categoryId),
+    productRepository.getProductsByCategoryId(categoryId)
+  ]);
 
   if (!category)
     notFound();
