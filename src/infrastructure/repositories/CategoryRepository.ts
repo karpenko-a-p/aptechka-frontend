@@ -1,7 +1,7 @@
 import { Category, type CategoryId } from 'infrastructure/models/Category';
 import { Service } from 'typedi';
 import 'server-only';
-import { Bind, Cache } from 'infrastructure/decorators';
+import { Cache } from 'infrastructure/decorators';
 import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
 
 interface ICategoryEntity {
@@ -29,14 +29,12 @@ export class CategoryRepository {
   `);
 
   @Cache()
-  @Bind()
   async getCategories(): Promise<Category[]> {
     const { rows } = await CategoryRepository.selectAllCategoriesQuery();
     return rows.map(CategoryRepository.entityToModel);
   }
 
   @Cache()
-  @Bind()
   async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {
     const query = `
       SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words

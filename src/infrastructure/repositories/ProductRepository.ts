@@ -3,7 +3,7 @@ import { Product } from 'infrastructure/models/Product';
 import { Service } from 'typedi';
 import 'server-only';
 import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
-import { Bind, Cache } from 'infrastructure/decorators';
+import { Cache } from 'infrastructure/decorators';
 
 interface IProductEntity {
   id: number;
@@ -22,7 +22,6 @@ export class ProductRepository {
   `);
 
   @Cache()
-  @Bind()
   async getProductById(id: Product['id']): Promise<Nullable<Product>> {
     const { rows } = await ProductRepository.selectProductByIdQuery([id]);
 
@@ -39,7 +38,6 @@ export class ProductRepository {
   `);
 
   @Cache()
-  @Bind()
   async getProductsByCategoryId(id: Category['id']): Promise<Product[]> {
     const { rows } = await ProductRepository.selectProductByCategoryIdQuery([id]);
     return rows.map(ProductRepository.entityToModel);

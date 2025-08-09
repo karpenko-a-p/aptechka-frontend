@@ -2,7 +2,7 @@ import { Service } from 'typedi';
 import { News, type NewsId } from 'infrastructure/models/News';
 import 'server-only';
 import { DatabaseProvider } from 'infrastructure/repositories/DatabaseProvider';
-import { Bind, Cache } from 'infrastructure/decorators';
+import { Cache } from 'infrastructure/decorators';
 
 interface INewsEntity {
   id: string;
@@ -14,7 +14,6 @@ interface INewsEntity {
 @Service()
 export class NewsRepository {
   @Cache()
-  @Bind()
   async getNews(): Promise<News[]> {
     const query = 'SELECT id::integer, * FROM news LIMIT 5;';
     const { rows } = await DatabaseProvider.pool.query<INewsEntity>(query);
@@ -22,7 +21,6 @@ export class NewsRepository {
   }
 
   @Cache()
-  @Bind()
   async getNewsById(id: NewsId): Promise<Nullable<News>> {
     const query = 'SELECT * FROM news WHERE id = $1;';
     const { rows } = await DatabaseProvider.pool.query<INewsEntity>(query, [id]);
@@ -33,7 +31,7 @@ export class NewsRepository {
     return NewsRepository.entityToModel(rows[0]);
   }
 
-  @Bind()
+  @Cache()
   getNewUsersDiscount(): Promise<number> {
     return Promise.resolve(10);
   }
