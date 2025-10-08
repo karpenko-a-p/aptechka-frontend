@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import type { Metadata } from 'next';
-import 'presentation/ui/variables/tailwindcss.css';
+import 'presentation/ui/tailwindcss.css';
 import { Providers } from 'presentation/components/Providers';
 import { Inter } from 'next/font/google';
 import { type JSX } from 'react';

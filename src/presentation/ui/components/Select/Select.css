@@ -16,11 +16,15 @@
     @apply after:content-['*'] after:ml-0.5 after:text-red-500;
   }
 
+  .select:has(select:disabled) {
+    @apply cursor-not-allowed;
+  }
+
   .select select {
     @apply border-1 border-solid border-gray-200 rounded-lg px-2 pb-1.5 pt-5 pr-5 transition-all font-[400]
     hover:border-blue-600 focus:border-blue-500 focus:outline focus:outline-blue-500
     disabled:border-gray-200 disabled:bg-gray-200 grow appearance-none truncate max-w-full
-    not-disabled:not-focus:aria-[invalid="true"]:border-red-500;
+    not-disabled:not-focus:aria-[invalid="true"]:border-red-500 disabled:text-gray-600;
   }
 
   .select > label:has(:disabled) {

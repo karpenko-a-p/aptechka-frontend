@@ -24,6 +24,14 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
    * Описание
    */
   description?: string;
+  /**
+   * Недоступно
+   */
+  disabled?: boolean;
+  /**
+   * Обязательность
+   */
+  required?: boolean;
 };
 
 /**

@@ -26,6 +26,14 @@ export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
    */
   label: string;
   /**
+   * Недоступно
+   */
+  disabled?: boolean;
+  /**
+   * Обязательность
+   */
+  required?: boolean;
+  /**
    * Варианты
    */
   children: ReactElement<HTMLOptionElement>[];

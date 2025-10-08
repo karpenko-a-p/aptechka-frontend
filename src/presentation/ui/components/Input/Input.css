@@ -20,10 +20,14 @@
     @apply select-none cursor-not-allowed pointer-events-none;
   }
 
+  .input:has(input:disabled) {
+    @apply cursor-not-allowed;
+  }
+
   .input input {
     @apply border-1 border-solid border-gray-200 rounded-lg px-2 pb-1.5 pt-5 transition-all font-[400]
     hover:border-blue-600 focus:border-blue-500 focus:outline focus:outline-blue-500
-    placeholder:text-gray-300 disabled:border-gray-200 disabled:bg-gray-200
+    placeholder:text-gray-300 disabled:border-gray-200 disabled:bg-gray-200 disabled:text-gray-600
     not-disabled:not-focus:aria-[invalid="true"]:border-red-500;
   }
 

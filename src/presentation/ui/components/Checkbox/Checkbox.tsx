@@ -13,6 +13,14 @@ export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
    * Ошибка
    */
   invalid?: boolean;
+  /**
+   * Недоступно
+   */
+  disabled?: boolean;
+  /**
+   * Обязательность
+   */
+  required?: boolean;
 };
 
 /**
