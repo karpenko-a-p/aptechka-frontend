@@ -1,24 +1,24 @@
-import { Service } from 'typedi';
-
-@Service()
-export class Logger {
-  log(...args: unknown[]): void {
+/**
+ * Логгер для клиентской и серверной сторон
+ */
+export abstract class Logger {
+  static log(...args: unknown[]): void {
     console.log(`LOG [${new Date().toISOString()}]:`, ...args);
   }
 
-  info(...args: unknown[]): void {
+  static info(...args: unknown[]): void {
     console.log(`INFO [${new Date().toISOString()}]:`, ...args);
   }
 
-  warn(...args: unknown[]): void {
+  static warn(...args: unknown[]): void {
     console.log(`WARN [${new Date().toISOString()}]:`, ...args);
   }
 
-  error(...args: unknown[]): void {
+  static error(...args: unknown[]): void {
     console.log(`ERROR [${new Date().toISOString()}]:`, ...args);
   }
 
-  critical(...args: unknown[]): void {
+  static critical(...args: unknown[]): void {
     console.log(`CRITICAL [${new Date().toISOString()}]:`, ...args);
   }
 }

@@ -1,7 +1,7 @@
 /**
  * Окружение
  */
-export class Environment {
+export abstract class Environment {
   /**
    * JWT secret
    */

@@ -1,3 +1,4 @@
+import 'client-only';
 import { Service } from 'typedi';
 import { makeAutoObservable } from 'mobx';
 

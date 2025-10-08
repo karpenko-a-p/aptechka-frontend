@@ -1,19 +1,16 @@
 import React, { JSX } from 'react';
-import { Container } from 'typedi';
 import { MemoryCache } from 'infrastructure/services';
-
-const memoryCache = Container.get(MemoryCache);
 
 interface CacheSample {
   timestamp: Date;
 }
 
 export default function Page(): JSX.Element {
-  let cachedValue = memoryCache.get<CacheSample>('sample-value');
+  let cachedValue = MemoryCache.get<CacheSample>('sample-value');
 
   if (!cachedValue) {
     cachedValue = { timestamp: new Date() };
-    memoryCache.set('sample-value', cachedValue, memoryCache.cacheForMinutes(1));
+    MemoryCache.set('sample-value', cachedValue, MemoryCache.cacheForMinutes(1));
   }
 
   return <p>Cache date: {cachedValue.timestamp.toISOString()}</p>;

@@ -3,7 +3,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useService } from 'presentation/hooks/useService';
-import { CounterStore } from 'infrastructure/stores';
+import { CounterStore } from 'presentation/stores';
 
 export const Counter = observer(() => {
   const { getCount, increment, decrement } = useService(CounterStore);

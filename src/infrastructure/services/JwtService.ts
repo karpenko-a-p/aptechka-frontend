@@ -1,4 +1,4 @@
-import { Service } from 'typedi';
+import 'server-only';
 import { default as jwt } from 'jsonwebtoken';
 import { AUTHORIZATION_EXPIRES } from 'infrastructure/constants/auth';
 import { Environment } from 'infrastructure/utils/Environment';
@@ -13,13 +13,12 @@ export interface IJwtTokenPayload {
   iss: string;
 }
 
-@Service()
-export class JwtService {
-  getTokenPayload(token: string): IJwtTokenPayload {
+export abstract class JwtService {
+  static getTokenPayload(token: string): IJwtTokenPayload {
     return jwt.verify(token, Environment.JWT_SECRET) as IJwtTokenPayload;
   }
 
-  sign(payload: Pick<IJwtTokenPayload, 'id' | 'login'>): string {
+  static sign(payload: Pick<IJwtTokenPayload, 'id' | 'login'>): string {
     return jwt.sign(payload, Environment.JWT_SECRET, {
       expiresIn: Date.now() + AUTHORIZATION_EXPIRES,
       issuer: 'Aptechka',

@@ -13,7 +13,6 @@ import { UserRepository } from 'infrastructure/repositories';
 import { JwtService } from 'infrastructure/services';
 
 const userRepository = Container.get(UserRepository);
-const jwtService = Container.get(JwtService);
 
 export async function register(payload: FormData): Promise<IActionResult> {
   const login = (payload.get('login') as string)?.trim();
@@ -35,7 +34,7 @@ export async function register(payload: FormData): Promise<IActionResult> {
 
   const user = await userRepository.createUser(login, hashedPassword);
 
-  const jwtToken = jwtService.sign({ id: user.id, login: user.login });
+  const jwtToken = JwtService.sign({ id: user.id, login: user.login });
 
   const cookie = await cookies();
 
