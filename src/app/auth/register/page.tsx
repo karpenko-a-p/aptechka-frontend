@@ -1,13 +1,13 @@
 'use client';
 
-import { Input } from 'presentation/ui/components';
+import { Input } from 'client/ui/components';
 import { IconEye, IconLogin2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { type JSX } from 'react';
-import { useBoolean } from 'presentation/hooks';
+import { useBoolean } from 'client/hooks';
 import { FormEvent, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { register, isRegisterEmailAlreadyInUse, isRegisterSuccess, isRegisterValidationError } from 'infrastructure/actions/register';
+import { register, isRegisterEmailAlreadyInUse, isRegisterSuccess, isRegisterValidationError } from 'server/actions/register';
 
 export default function Page(): JSX.Element {
   const { value: showPassword, toggle } = useBoolean();

@@ -3,11 +3,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import { type JSX } from 'react';
-import { UserInformation } from 'presentation/components/UserInformation';
-import { UserLogin } from 'presentation/components/UserLogin';
-import { parseJwtToken } from 'infrastructure/use-cases/parseJwtToken';
+import { UserInformation } from 'client/components/UserInformation';
+import { UserLogin } from 'client/components/UserLogin';
+import { parseJwtToken } from 'server/use-cases/parseJwtToken';
 import { Container } from 'typedi';
-import { CategoryRepository, NewsRepository, UserRepository } from 'infrastructure/repositories';
+import { CategoryRepository, NewsRepository, UserRepository } from 'server/repositories';
 
 const categoryRepository = Container.get(CategoryRepository);
 const newsRepository = Container.get(NewsRepository);

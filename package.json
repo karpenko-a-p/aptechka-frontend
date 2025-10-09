@@ -5,7 +5,7 @@
   "scripts": {
     "dev:turbo": "next dev --turbopack",
     "dev": "next dev -H 0.0.0.0",
-    "storybook": "storybook dev -c ./src/presentation/ui/.storybook -p 4444",
+    "storybook": "storybook dev -c ./src/client/ui/.storybook -p 4444",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

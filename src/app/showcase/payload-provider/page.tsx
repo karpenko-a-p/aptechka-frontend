@@ -1,4 +1,4 @@
-import { PayloadProvider } from 'presentation/providers/PayloadProvider';
+import { PayloadProvider } from 'client/providers/PayloadProvider';
 import { PayloadConsumer } from './PayloadConsumer';
 import Link from 'next/link';
 import { type JSX } from 'react';

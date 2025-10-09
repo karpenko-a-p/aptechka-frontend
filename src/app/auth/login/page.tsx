@@ -1,12 +1,12 @@
 'use client';
 
 import { IconLogin2, IconEye } from '@tabler/icons-react';
-import { Input } from 'presentation/ui/components';
+import { Input } from 'client/ui/components';
 import Link from 'next/link';
 import type { JSX } from 'react';
-import { useBoolean } from 'presentation/hooks';
+import { useBoolean } from 'client/hooks';
 import { FormEvent, useState, useTransition } from 'react';
-import { login, isInvalidLoginOrPassword, isLoginSuccess, isLoginValidationError } from 'infrastructure/actions/login';
+import { login, isInvalidLoginOrPassword, isLoginSuccess, isLoginValidationError } from 'server/actions/login';
 import { useRouter } from 'next/navigation';
 
 export default function Page(): JSX.Element {

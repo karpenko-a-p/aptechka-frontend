@@ -1,6 +1,6 @@
 'use client';
 
-import { useService } from 'presentation/hooks/useService';
+import { useService } from 'client/hooks/useService';
 import { ViewModel } from './ViewModel';
 import Link from 'next/link';
 import { type JSX } from 'react';

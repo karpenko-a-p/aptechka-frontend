@@ -1,11 +1,11 @@
-import { parseJwtToken } from 'infrastructure/use-cases/parseJwtToken';
+import { parseJwtToken } from 'server/use-cases/parseJwtToken';
 import { redirect } from 'next/navigation';
 import { ExitButton } from 'src/app/profile/ExitButton';
 import Link from 'next/link';
 import type { JSX } from 'react';
 import { IconShoppingCart } from '@tabler/icons-react';
 import { Container } from 'typedi';
-import { UserRepository } from 'infrastructure/repositories';
+import { UserRepository } from 'server/repositories';
 
 const userRepository = Container.get(UserRepository);
 

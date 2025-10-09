@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useService } from 'presentation/hooks/useService';
-import { CounterStore } from 'presentation/stores';
+import { useService } from 'client/hooks/useService';
+import { CounterStore } from 'client/stores';
 
 export const Counter = observer(() => {
   const { getCount, increment, decrement } = useService(CounterStore);

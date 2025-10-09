@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC, HTMLAttributes } from 'react';
-import { logout } from 'infrastructure/actions/logout';
+import { logout } from 'server/actions/logout';
 import { IconLogout2 } from '@tabler/icons-react';
 
 export const ExitButton: FC<HTMLAttributes<HTMLButtonElement>> = (props) => {
