@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'server/constants/auth';
 import { User } from 'server/models/User';
 import { UserRepository } from 'server/repositories';
-import { JwtService } from 'server/services';
+import { JwtService } from 'server/services/JwtService';
 
 export async function login(payload: FormData): Promise<IActionResult> {
   const formLogin = (payload.get('login') as string)?.trim();

@@ -4,10 +4,7 @@ import { ExitButton } from 'src/app/profile/ExitButton';
 import Link from 'next/link';
 import type { JSX } from 'react';
 import { IconShoppingCart } from '@tabler/icons-react';
-import { Container } from 'typedi';
 import { UserRepository } from 'server/repositories';
-
-const userRepository = Container.get(UserRepository);
 
 export const revalidate = 0;
 
@@ -20,7 +17,7 @@ export default async function Page(): Promise<JSX.Element> {
   if (!tokenPayload)
     redirect('/login');
 
-  const user = await userRepository.getUserById(tokenPayload.id);
+  const user = await UserRepository.getUserById(tokenPayload.id);
 
   if (!user)
     redirect('/register');

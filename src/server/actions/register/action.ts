@@ -8,7 +8,7 @@ import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS 
 import { cookies } from 'next/headers';
 import { User } from 'server/models/User';
 import { UserRepository } from 'server/repositories';
-import { JwtService } from 'server/services';
+import { JwtService } from 'server/services/JwtService';
 
 export async function register(payload: FormData): Promise<IActionResult> {
   const login = (payload.get('login') as string)?.trim();

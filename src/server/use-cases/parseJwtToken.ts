@@ -5,7 +5,7 @@ import {
   AUTHORIZATION_REVALIDATION_TIME
 } from 'server/constants/auth';
 import { cookies } from 'next/headers';
-import { JwtService, IJwtTokenPayload } from 'server/services';
+import { JwtService, IJwtTokenPayload } from 'server/services/JwtService';
 
 /**
  * Получение информации по пользователю из токена

@@ -1,6 +1,6 @@
 import 'server-only';
 import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
-import { Environment } from 'server/utils/Environment';
+import { Environment } from 'server/services/Environment';
 
 export abstract class Database {
   /**

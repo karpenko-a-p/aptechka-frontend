@@ -1,7 +1,7 @@
 import 'server-only';
 import { default as jwt } from 'jsonwebtoken';
 import { AUTHORIZATION_EXPIRES } from 'server/constants/auth';
-import { Environment } from 'server/utils/Environment';
+import { Environment } from 'server/services/Environment';
 import { UserLogin, UserId } from 'server/models/User';
 
 export interface IJwtTokenPayload {

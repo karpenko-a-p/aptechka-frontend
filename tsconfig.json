@@ -22,7 +22,6 @@
     "types": ["node", "next"],
     "typeRoots": ["./src/app"],
     "paths": {
-      "shared/*": ["./src/shared/*"],
       "client/*": ["./src/client/*"],
       "server/*": ["./src/server/*"]
     }
