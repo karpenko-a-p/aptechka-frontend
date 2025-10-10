@@ -2,16 +2,12 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { type JSX } from 'react';
-import { Container } from 'typedi';
 import { CategoryRepository, ProductRepository } from 'server/repositories';
-
-const categoryRepository = Container.get(CategoryRepository);
-const productRepository = Container.get(ProductRepository);
 
 export const revalidate = 300;
 
 export async function generateMetadata({ params }: RouteSegment<'id'>): Promise<Metadata> {
-  const category = await categoryRepository.getCategoryById((await params).id);
+  const category = await CategoryRepository.getCategoryById((await params).id);
 
   if (!category) notFound();
 
@@ -26,8 +22,8 @@ export default async function Page({ params }: RouteSegment<'id'>): Promise<JSX.
   const categoryId = (await params).id;
 
   const [category, products] = await Promise.all([
-    categoryRepository.getCategoryById(categoryId),
-    productRepository.getProductsByCategoryId(categoryId)
+    CategoryRepository.getCategoryById(categoryId),
+    ProductRepository.getProductsByCategoryId(categoryId)
   ]);
 
   if (!category)

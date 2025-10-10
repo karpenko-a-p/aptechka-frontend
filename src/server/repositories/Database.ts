@@ -2,7 +2,7 @@ import 'server-only';
 import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
 import { Environment } from 'server/utils/Environment';
 
-export abstract class DatabaseProvider {
+export abstract class Database {
   /**
    * Пул клиентов для работы с БД
    */
@@ -13,14 +13,14 @@ export abstract class DatabaseProvider {
    */
   static compileQuery<TRow extends QueryResultRow>(query: string) {
     const optimizedQuery = query.replaceAll(/\s{2,}/g, ' ').trim();
-    return (args?: unknown[]): Promise<QueryResult<TRow>> => DatabaseProvider.pool.query<TRow>(optimizedQuery, args);
+    return (args?: unknown[]): Promise<QueryResult<TRow>> => Database.pool.query<TRow>(optimizedQuery, args);
   }
 
   /**
    * Транзакция
    */
   static async transaction<TResult = void>(callback: (client: PoolClient) => Promise<TResult>): Promise<TResult> {
-    const client = await DatabaseProvider.pool.connect();
+    const client = await Database.pool.connect();
 
     try {
       await client.query('BEGIN');

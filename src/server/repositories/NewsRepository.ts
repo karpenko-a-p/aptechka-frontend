@@ -1,7 +1,6 @@
-import { Service } from 'typedi';
 import { News, type NewsId } from 'server/models/News';
 import 'server-only';
-import { DatabaseProvider } from 'server/repositories/DatabaseProvider';
+import { Database } from 'server/repositories/Database';
 import { Cache } from 'server/decorators';
 
 interface INewsEntity {
@@ -11,19 +10,18 @@ interface INewsEntity {
   create_date: Date;
 }
 
-@Service()
-export class NewsRepository {
+export abstract class NewsRepository {
   @Cache()
-  async getNews(): Promise<News[]> {
+  static async getNews(): Promise<News[]> {
     const query = 'SELECT id::integer, * FROM news LIMIT 5;';
-    const { rows } = await DatabaseProvider.pool.query<INewsEntity>(query);
+    const { rows } = await Database.pool.query<INewsEntity>(query);
     return rows.map(NewsRepository.entityToModel);
   }
 
   @Cache()
-  async getNewsById(id: NewsId): Promise<Nullable<News>> {
+  static async getNewsById(id: NewsId): Promise<Nullable<News>> {
     const query = 'SELECT * FROM news WHERE id = $1;';
-    const { rows } = await DatabaseProvider.pool.query<INewsEntity>(query, [id]);
+    const { rows } = await Database.pool.query<INewsEntity>(query, [id]);
 
     if (!rows[0])
       return null;
@@ -32,7 +30,7 @@ export class NewsRepository {
   }
 
   @Cache()
-  getNewUsersDiscount(): Promise<number> {
+  static getNewUsersDiscount(): Promise<number> {
     return Promise.resolve(10);
   }
 

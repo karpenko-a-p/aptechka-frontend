@@ -1,6 +1,5 @@
 'use server';
 
-import 'reflect-metadata';
 import 'server-only';
 import { ActionResult, IActionResult } from 'server/utils/ActionResult';
 import { cookies } from 'next/headers';
@@ -8,11 +7,8 @@ import { LoginResult } from 'server/actions/login/constants';
 import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'server/constants/auth';
 import { User } from 'server/models/User';
-import { Container } from 'typedi';
 import { UserRepository } from 'server/repositories';
 import { JwtService } from 'server/services';
-
-const userRepository = Container.get(UserRepository);
 
 export async function login(payload: FormData): Promise<IActionResult> {
   const formLogin = (payload.get('login') as string)?.trim();
@@ -24,7 +20,7 @@ export async function login(payload: FormData): Promise<IActionResult> {
   if (validationResult.length)
     return new ActionResult(LoginResult.ValidationFailure, validationResult);
 
-  const user = await userRepository.getUserWithPasswordByLogin(formLogin);
+  const user = await UserRepository.getUserWithPasswordByLogin(formLogin);
 
   // Пользователь не найден
   if (!user)

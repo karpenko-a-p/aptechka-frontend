@@ -1,6 +1,5 @@
 'use server';
 
-import 'reflect-metadata';
 import 'server-only';
 import { ActionResult, IActionResult } from 'server/utils/ActionResult';
 import { RegisterResult } from 'server/actions/register/constants';
@@ -8,11 +7,8 @@ import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS } from 'server/constants/auth';
 import { cookies } from 'next/headers';
 import { User } from 'server/models/User';
-import { Container } from 'typedi';
 import { UserRepository } from 'server/repositories';
 import { JwtService } from 'server/services';
-
-const userRepository = Container.get(UserRepository);
 
 export async function register(payload: FormData): Promise<IActionResult> {
   const login = (payload.get('login') as string)?.trim();
@@ -24,7 +20,7 @@ export async function register(payload: FormData): Promise<IActionResult> {
   if (validationResult.length)
     return new ActionResult(RegisterResult.ValidationFailure, validationResult);
 
-  const exists = await userRepository.checkUserExistsByLogin(login);
+  const exists = await UserRepository.checkUserExistsByLogin(login);
 
   // Пользователь с таокй почтой уже существует
   if (exists)
@@ -32,7 +28,7 @@ export async function register(payload: FormData): Promise<IActionResult> {
 
   const hashedPassword = await bcrypt.hash(password, PASSWORD_HASH_ROUNDS);
 
-  const user = await userRepository.createUser(login, hashedPassword);
+  const user = await UserRepository.createUser(login, hashedPassword);
 
   const jwtToken = JwtService.sign({ id: user.id, login: user.login });
 

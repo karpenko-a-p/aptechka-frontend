@@ -1,6 +1,5 @@
 import { User, type UserId, type UserLogin, type UserPassword } from 'server/models/User';
-import { Service } from 'typedi';
-import { DatabaseProvider } from 'server/repositories/DatabaseProvider';
+import { Database } from 'server/repositories/Database';
 import { Cache } from 'server/decorators';
 
 interface IUserEntity {
@@ -9,35 +8,34 @@ interface IUserEntity {
   password: string;
 }
 
-@Service()
-export class UserRepository {
-  async checkUserExistsByLogin(login: UserLogin): Promise<boolean> {
+export abstract class UserRepository {
+  static async checkUserExistsByLogin(login: UserLogin): Promise<boolean> {
     const query = 'SELECT 1 FROM users AS u WHERE u.login = $1;';
-    const { rowCount } = await DatabaseProvider.pool.query(query, [login]);
+    const { rowCount } = await Database.pool.query(query, [login]);
     return !!rowCount;
   }
 
-  async createUser(login: UserLogin, password: UserPassword): Promise<User> {
+  static async createUser(login: UserLogin, password: UserPassword): Promise<User> {
     const query = 'INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *;';
-    const { rows } = await DatabaseProvider.pool.query<Omit<IUserEntity, 'password'>>(query, [login, password]);
+    const { rows } = await Database.pool.query<Omit<IUserEntity, 'password'>>(query, [login, password]);
     return UserRepository.entityToModel(rows[0]);
   }
 
   @Cache()
-  async getUserById(id: UserId): Promise<Nullable<User>> {
+  static async getUserById(id: UserId): Promise<Nullable<User>> {
     const query = 'SELECT id, login FROM users AS u WHERE u.id = $1;';
-    const { rows } = await DatabaseProvider.pool.query<Omit<IUserEntity, 'password'>>(query, [id]);
+    const { rows } = await Database.pool.query<Omit<IUserEntity, 'password'>>(query, [id]);
     return rows[0] ? UserRepository.entityToModel(rows[0]) : null;
   }
 
-  async deleteUserById(id: UserId): Promise<void> {
+  static async deleteUserById(id: UserId): Promise<void> {
     const query = 'DELETE FROM users AS u WHERE u.id = $1;';
-    await DatabaseProvider.pool.query(query, [id]);
+    await Database.pool.query(query, [id]);
   }
 
-  async getUserWithPasswordByLogin(login: UserLogin): Promise<Nullable<User>> {
+  static async getUserWithPasswordByLogin(login: UserLogin): Promise<Nullable<User>> {
     const query = 'SELECT * FROM users AS u WHERE u.login = $1;';
-    const { rows } = await DatabaseProvider.pool.query<IUserEntity>(query, [login]);
+    const { rows } = await Database.pool.query<IUserEntity>(query, [login]);
     return rows[0] ? UserRepository.entityToModel(rows[0]) : null;
   }
 

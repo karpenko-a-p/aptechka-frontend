@@ -1,8 +1,7 @@
 import { Category } from 'server/models/Category';
 import { Product } from 'server/models/Product';
-import { Service } from 'typedi';
 import 'server-only';
-import { DatabaseProvider } from 'server/repositories/DatabaseProvider';
+import { Database } from 'server/repositories/Database';
 import { Cache } from 'server/decorators';
 
 interface IProductEntity {
@@ -12,17 +11,16 @@ interface IProductEntity {
   category_id: string;
 }
 
-@Service()
-export class ProductRepository {
+export abstract class ProductRepository {
   /**
    * Запрос для получения продукта по идентификатору
    */
-  private static selectProductByIdQuery = DatabaseProvider.compileQuery<IProductEntity>(`
+  private static selectProductByIdQuery = Database.compileQuery<IProductEntity>(`
     SELECT * FROM products WHERE id = $1
   `);
 
   @Cache()
-  async getProductById(id: Product['id']): Promise<Nullable<Product>> {
+  static async getProductById(id: Product['id']): Promise<Nullable<Product>> {
     const { rows } = await ProductRepository.selectProductByIdQuery([id]);
 
     if (!rows[0]) return null;
@@ -33,12 +31,12 @@ export class ProductRepository {
   /**
    * Запрос для получения продуктов по идентификатору категории
    */
-  private static selectProductByCategoryIdQuery = DatabaseProvider.compileQuery<IProductEntity>(`
+  private static selectProductByCategoryIdQuery = Database.compileQuery<IProductEntity>(`
     SELECT * FROM products WHERE category_id = $1;
   `);
 
   @Cache()
-  async getProductsByCategoryId(id: Category['id']): Promise<Product[]> {
+  static async getProductsByCategoryId(id: Category['id']): Promise<Product[]> {
     const { rows } = await ProductRepository.selectProductByCategoryIdQuery([id]);
     return rows.map(ProductRepository.entityToModel);
   }

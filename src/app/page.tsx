@@ -6,19 +6,14 @@ import { type JSX } from 'react';
 import { UserInformation } from 'client/components/UserInformation';
 import { UserLogin } from 'client/components/UserLogin';
 import { parseJwtToken } from 'server/use-cases/parseJwtToken';
-import { Container } from 'typedi';
 import { CategoryRepository, NewsRepository, UserRepository } from 'server/repositories';
-
-const categoryRepository = Container.get(CategoryRepository);
-const newsRepository = Container.get(NewsRepository);
-const userRepository = Container.get(UserRepository);
 
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const [categories, discount] = await Promise.all([
-    categoryRepository.getCategories(),
-    newsRepository.getNewUsersDiscount(),
+    CategoryRepository.getCategories(),
+    NewsRepository.getNewUsersDiscount(),
   ]);
 
   return {
@@ -35,10 +30,10 @@ export default async function Page(): Promise<JSX.Element> {
   const tokenPayload = await parseJwtToken();
 
   const [categories, discount, news, user] = await Promise.all([
-    categoryRepository.getCategories(),
-    newsRepository.getNewUsersDiscount(),
-    newsRepository.getNews(),
-    tokenPayload ? userRepository.getUserById(tokenPayload.id) : Promise.resolve(null),
+    CategoryRepository.getCategories(),
+    NewsRepository.getNewUsersDiscount(),
+    NewsRepository.getNews(),
+    tokenPayload ? UserRepository.getUserById(tokenPayload.id) : Promise.resolve(null),
   ]);
 
   return (

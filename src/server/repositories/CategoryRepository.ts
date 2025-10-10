@@ -1,8 +1,7 @@
 import { Category, type CategoryId } from 'server/models/Category';
-import { Service } from 'typedi';
 import 'server-only';
 import { Cache } from 'server/decorators';
-import { DatabaseProvider } from 'server/repositories/DatabaseProvider';
+import { Database } from 'server/repositories/Database';
 
 interface ICategoryEntity {
   id: string;
@@ -15,12 +14,11 @@ interface ICategoryWithKeyWordsEntity extends ICategoryEntity {
   key_words: string;
 }
 
-@Service()
-export class CategoryRepository {
+export abstract class CategoryRepository {
   /**
    * Получение списка всех категорий
    */
-  private static selectAllCategoriesQuery = DatabaseProvider.compileQuery<ICategoryWithKeyWordsEntity>(`
+  private static selectAllCategoriesQuery = Database.compileQuery<ICategoryWithKeyWordsEntity>(`
     SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words
     FROM categories AS c
     JOIN categories_key_words AS ckw ON ckw.category_id = c.id
@@ -29,13 +27,13 @@ export class CategoryRepository {
   `);
 
   @Cache()
-  async getCategories(): Promise<Category[]> {
+  static async getCategories(): Promise<Category[]> {
     const { rows } = await CategoryRepository.selectAllCategoriesQuery();
     return rows.map(CategoryRepository.entityToModel);
   }
 
   @Cache()
-  async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {
+  static async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {
     const query = `
       SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words
       FROM categories AS c
@@ -44,7 +42,7 @@ export class CategoryRepository {
       GROUP BY c.id;
     `;
 
-    const { rows } = await DatabaseProvider.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
+    const { rows } = await Database.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
     return rows[0] ? CategoryRepository.entityToModel(rows[0]) : null;
   }
 
