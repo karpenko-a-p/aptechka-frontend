@@ -1,7 +1,7 @@
 @layer components {
   p.badge {
     @apply px-2 py-1 rounded-lg text-sm text-black bg-gray-200 font-medium flex gap-1 items-center
-    [&>svg]:size-[20px];
+    whitespace-nowrap [&>svg]:size-[20px];
   }
 
   p.badge.green {

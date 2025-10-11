@@ -9,7 +9,7 @@
 @import './components/text.css';
 @import './components/heading.css';
 @import './components/button.css';
-@import './components/badge.css';
+@import './components/Badge/Badge.css';
 @import './components/link.css';
 @import './components/skeleton.css';
 @import './components/paper.css';
