@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { EMPTY_ARRAY } from 'server/utils/structures';
 
 export type UseBooleanReturn = {
   value: boolean;
@@ -7,7 +8,6 @@ export type UseBooleanReturn = {
   toggle(): void;
 }
 
-const EMPTY_ARRAY = [] as const;
 const REVERSE_BOOL_FUNC = (value: boolean): boolean => !value;
 
 /**

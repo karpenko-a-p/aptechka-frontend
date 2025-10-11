@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import throttle from 'lodash/throttle';
+import { EMPTY_ARRAY } from 'server/utils/structures';
 
 const enum Screen {
   Mobile,
@@ -27,7 +28,7 @@ export const useScreen = (): Record<'mobile' | 'desktop' | 'tablet', boolean> =>
     document.addEventListener('resize', resize);
 
     return (): void => document.removeEventListener('resize', resize);
-  }, []);
+  }, EMPTY_ARRAY);
 
   return {
     mobile: breakpoint === Screen.Mobile,
