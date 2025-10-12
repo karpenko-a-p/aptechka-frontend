@@ -1,10 +1,11 @@
 import 'server-only';
+import { EMPTY_ARRAY } from 'server/utils/structures';
 
 class CachedValue {
   constructor(
     readonly value: unknown,
     private readonly expiresAt: number,
-    private readonly tags: string[],
+    private readonly tags: readonly string[],
   ) {}
 
   get expired(): boolean {
@@ -49,7 +50,11 @@ export abstract class MemoryCache {
   }
 
   static set(key: string, value: unknown, expiresAt?: number, tags?: string[]): void {
-    const cachedValue = new CachedValue(value, expiresAt ?? MemoryCache.cacheForMinutes(10), tags ?? []);
+    const cachedValue = new CachedValue(
+      value,
+      expiresAt ?? MemoryCache.cacheForMinutes(10),
+      tags ?? (EMPTY_ARRAY as string[]),
+    );
 
     if (!cachedValue.expired) MemoryCache.cache.set(key, cachedValue);
   }
