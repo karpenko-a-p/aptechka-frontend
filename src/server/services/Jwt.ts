@@ -13,7 +13,7 @@ export interface IJwtTokenPayload {
   iss: string;
 }
 
-export abstract class JwtService {
+export abstract class Jwt {
   static getTokenPayload(token: string): IJwtTokenPayload {
     return jwt.verify(token, Environment.JWT_SECRET) as IJwtTokenPayload;
   }

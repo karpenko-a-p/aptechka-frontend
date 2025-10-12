@@ -8,7 +8,7 @@ import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES, PASSWORD_HASH_ROUNDS 
 import { cookies } from 'next/headers';
 import { User } from 'server/models/User';
 import { UserRepository } from 'server/repositories';
-import { JwtService } from 'server/services/JwtService';
+import { Jwt } from 'server/services/Jwt';
 
 export async function register(payload: FormData): Promise<IActionResult> {
   const login = (payload.get('login') as string)?.trim();
@@ -30,7 +30,7 @@ export async function register(payload: FormData): Promise<IActionResult> {
 
   const user = await UserRepository.createUser(login, hashedPassword);
 
-  const jwtToken = JwtService.sign({ id: user.id, login: user.login });
+  const jwtToken = Jwt.sign({ id: user.id, login: user.login });
 
   const cookie = await cookies();
 

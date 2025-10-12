@@ -15,6 +15,11 @@ export abstract class Environment {
   static readonly DATABASE_CONNECTION_STRING = Environment.readFromEnv('DATABASE_CONNECTION_STRING');
 
   /**
+   * Строка подключения к кэшу
+   */
+  static readonly CACHE_CONNECTION_STRING = Environment.readFromEnv('CACHE_CONNECTION_STRING');
+
+  /**
    * Чтение переменной окружения
    */
   private static readFromEnv(key: string): string {

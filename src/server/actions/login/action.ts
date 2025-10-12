@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 import { AUTHORIZATION_COOKIE_NAME, AUTHORIZATION_EXPIRES } from 'server/constants/auth';
 import { User } from 'server/models/User';
 import { UserRepository } from 'server/repositories';
-import { JwtService } from 'server/services/JwtService';
+import { Jwt } from 'server/services/Jwt';
 
 export async function login(payload: FormData): Promise<IActionResult> {
   const formLogin = (payload.get('login') as string)?.trim();
@@ -32,7 +32,7 @@ export async function login(payload: FormData): Promise<IActionResult> {
   if (!passwordVerified)
     return new ActionResult(LoginResult.InvalidLoginOrPassword, null);
 
-  const jwtToken = JwtService.sign({ id: user.id, login: user.login });
+  const jwtToken = Jwt.sign({ id: user.id, login: user.login });
 
   const cookie = await cookies();
 

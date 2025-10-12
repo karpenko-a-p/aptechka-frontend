@@ -1,5 +1,5 @@
 import React, { JSX } from 'react';
-import { MemoryCache } from 'server/services/MemoryCache';
+import { MemoryCache } from 'server/cache/MemoryCache';
 
 interface CacheSample {
   timestamp: Date;
