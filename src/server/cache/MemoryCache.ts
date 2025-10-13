@@ -1,79 +1,60 @@
 import 'server-only';
-import { EMPTY_ARRAY } from 'server/utils/structures';
+import { LRUCache } from 'lru-cache';
 
-class CachedValue {
-  constructor(
-    readonly value: unknown,
-    private readonly expiresAt: number,
-    private readonly tags: readonly string[],
-  ) {}
-
-  get expired(): boolean {
-    return this.expiresAt < Date.now();
-  }
-
-  hasTag(tag: string): boolean {
-    return this.tags.includes(tag);
-  }
-}
+const lruCache = new LRUCache({
+  allowStale: false, // не возвращать просроченные данные
+  max: 1000, // максимальное количество элементов
+  maxSize: 100 * 1024 * 1024, // 100MB максимальный размер
+  ttl: 1000 * 60 * 60, // час по умолчанию
+  sizeCalculation(value: unknown, key: string): number {
+    // Расчет размера в байтах
+    if (Buffer.isBuffer(value)) return value.length;
+    return JSON.stringify(value).length + key.length;
+  },
+});
 
 export abstract class MemoryCache {
-  private static readonly cache = new Map<string, CachedValue>();
+  static readonly ONE_MINUTE = MemoryCache.minutes(1);
+  static readonly TEN_MINUTES = MemoryCache.minutes(10);
+  static readonly HALF_HOUR = MemoryCache.minutes(30);
+  static readonly ONE_HOUR = MemoryCache.hours(1);
+  static readonly THREE_HOURS = MemoryCache.hours(3);
+  static readonly SIX_HOURS = MemoryCache.hours(6);
+  static readonly ONE_DAY = MemoryCache.days(1);
+  static readonly ONE_WEEK = MemoryCache.days(7);
 
-  static cacheForMinutes(minutes: number): number {
-    return Date.now() + 1000 * 60 * minutes;
+  static set(key: string, value: unknown, ttl?: number): void {
+    lruCache.set(key, value as object, { ttl });
   }
 
-  static cacheForHours(hours: number): number {
-    return Date.now() + 1000 * 60 * 60 * hours;
-  }
-
-  static cacheForDays(days: number): number {
-    return Date.now() + 1000 * 60 * 60 * 24 * days;
+  static get<TPayload>(key: string): Nilable<TPayload> {
+    return lruCache.get(key) as Nilable<TPayload>;
   }
 
   static has(key: string): boolean {
-    return MemoryCache.cache.has(key);
+    return lruCache.has(key);
   }
 
-  static get<TValue>(key: string): Nullable<TValue> {
-    const cachedValue = MemoryCache.cache.get(key);
-
-    if (!cachedValue) return null;
-
-    if (cachedValue.expired) {
-      MemoryCache.deleteByKey(key);
-      return null;
-    }
-
-    return cachedValue.value as TValue;
+  static delete(key: string): void {
+    lruCache.delete(key);
   }
 
-  static set(key: string, value: unknown, expiresAt?: number, tags?: string[]): void {
-    const cachedValue = new CachedValue(
-      value,
-      expiresAt ?? MemoryCache.cacheForMinutes(10),
-      tags ?? (EMPTY_ARRAY as string[]),
-    );
-
-    if (!cachedValue.expired) MemoryCache.cache.set(key, cachedValue);
+  static clear(): void {
+    lruCache.clear();
   }
 
-  static deleteByKey(key: string): void {
-    MemoryCache.cache.delete(key);
+  // Минуты
+  static minutes(mins: number): number {
+    return mins * 60 * 1000;
   }
 
-  static deleteByTag(tag: string): void {
-    MemoryCache.cache.entries().forEach(([key, cachedValue]) => {
-      if (cachedValue.hasTag(tag)) MemoryCache.deleteByKey(key);
-    });
+  // Часы
+  static hours(hours: number): number {
+    return hours * 60 * 60 * 1000;
   }
 
-  static invalidate(): void {
-    MemoryCache.cache.entries().forEach(([key, cachedValue]) => {
-      if (cachedValue.expired) MemoryCache.deleteByKey(key);
-    });
+  // дни
+  static days(days: number): number {
+    return days * 24 * 60 * 60 * 1000;
   }
 }
-
-setInterval(MemoryCache.invalidate, 60_000);

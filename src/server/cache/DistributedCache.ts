@@ -35,7 +35,7 @@ export abstract class DistributedCache {
     const pipeline = redisClient.multi();
 
     // Сохраняем основное значение
-    await redisClient.setEx(key, ttl, JSON.stringify(payload));
+    pipeline.setEx(key, ttl, JSON.stringify(payload));
 
     // Сохраняем связь ключа с тегами
     tags.forEach((tag) => pipeline.sAdd(`tag:${tag}`, key));

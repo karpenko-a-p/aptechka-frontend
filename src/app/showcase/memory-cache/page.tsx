@@ -10,7 +10,7 @@ export default function Page(): JSX.Element {
 
   if (!cachedValue) {
     cachedValue = { timestamp: new Date() };
-    MemoryCache.set('sample-value', cachedValue, MemoryCache.cacheForMinutes(1));
+    MemoryCache.set('sample-value', cachedValue, MemoryCache.ONE_MINUTE);
   }
 
   return <p>Cache date: {cachedValue.timestamp.toISOString()}</p>;
