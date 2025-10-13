@@ -1,7 +1,6 @@
-import 'reflect-metadata';
 import type { Metadata } from 'next';
 import 'client/ui/tailwindcss.css';
-import { Providers } from 'client/components/Providers';
+import { Configurations } from 'client/components/Configurations';
 import { Inter } from 'next/font/google';
 import { type JSX } from 'react';
 
@@ -23,7 +22,7 @@ export default function RootLayout({ children }: Children): JSX.Element {
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Configurations>{children}</Configurations>
       </body>
     </html>
   );
