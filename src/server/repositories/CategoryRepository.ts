@@ -2,6 +2,7 @@ import { Category, type CategoryId } from 'server/models/Category';
 import 'server-only';
 import { Cache } from 'server/decorators';
 import { Database } from 'server/repositories/Database';
+import { DistCache } from 'server/cache/DistributedCache';
 
 interface ICategoryEntity {
   id: string;
@@ -28,12 +29,27 @@ export abstract class CategoryRepository {
 
   @Cache()
   static async getCategories(): Promise<Category[]> {
+    const cachedRows = await DistCache.get<ICategoryWithKeyWordsEntity[]>('getCategories');
+
+    if (cachedRows) {
+      return cachedRows.map(CategoryRepository.entityToModel);
+    }
+
     const { rows } = await CategoryRepository.selectAllCategoriesQuery();
+
+    await DistCache.setWithTags('getCategories', rows, ['categories'], DistCache.ONE_HOUR);
+
     return rows.map(CategoryRepository.entityToModel);
   }
 
   @Cache()
   static async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {
+    const cachedRow = await DistCache.get<ICategoryWithKeyWordsEntity>(`getCategoryById:${id}`);
+
+    if (cachedRow) {
+      return CategoryRepository.entityToModel(cachedRow);
+    }
+
     const query = `
       SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words
       FROM categories AS c
@@ -43,7 +59,12 @@ export abstract class CategoryRepository {
     `;
 
     const { rows } = await Database.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
-    return rows[0] ? CategoryRepository.entityToModel(rows[0]) : null;
+
+    if (!rows[0]) return null;
+
+    await DistCache.setWithTags(`getCategoryById:${id}`, rows[0], ['categories'], DistCache.ONE_HOUR);
+
+    return CategoryRepository.entityToModel(rows[0]);
   }
 
   /**

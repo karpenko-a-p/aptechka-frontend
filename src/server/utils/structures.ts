@@ -1,1 +1,1 @@
-export const EMPTY_ARRAY: unknown[] = [] as const;
+export const EMPTY_ARRAY: any[] = [] as const;

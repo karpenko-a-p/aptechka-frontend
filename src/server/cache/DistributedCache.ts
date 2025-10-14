@@ -38,9 +38,28 @@ export abstract class DistributedCache {
     pipeline.setEx(key, ttl, JSON.stringify(payload));
 
     // Сохраняем связь ключа с тегами
-    tags.forEach((tag) => pipeline.sAdd(`tag:${tag}`, key));
+    tags.forEach((tag) => pipeline.sAdd(tag, key));
 
     await pipeline.exec();
+  }
+
+  // Получение из кэша или установкав кэш
+  static async take<TPayload>(
+    key: string,
+    ttl: number,
+    tags: string[],
+    fabric: () => Promise<TPayload>,
+  ): Promise<TPayload> {
+    const cachedValue = await DistributedCache.get<TPayload>(key);
+
+    if (cachedValue) return cachedValue;
+
+    const newValue = await fabric();
+
+    if (tags.length) await DistributedCache.setWithTags(key, newValue, tags, ttl);
+    else await DistributedCache.set(key, newValue, ttl);
+
+    return newValue;
   }
 
   // Инвалидация кэша
@@ -51,14 +70,9 @@ export abstract class DistributedCache {
 
   // Инвалидация по тегу
   static async invalidateByTag(tag: string): Promise<void> {
-    const tagKey = `tag:${tag}`;
-
     // Получаем все ключи ассоциированные с тегом
-    const keys = await redisClient.sMembers(tagKey);
-
-    if (!keys.length) return;
-
-    await Promise.all([redisClient.del(keys), redisClient.del(tagKey)]);
+    const keys = await redisClient.sMembers(tag);
+    if (keys.length) await Promise.all([redisClient.del(keys), redisClient.del(tag)]);
   }
 
   // Минуты
@@ -76,3 +90,5 @@ export abstract class DistributedCache {
     return days * 24 * 60 * 60;
   }
 }
+
+export const DistCache = DistributedCache;

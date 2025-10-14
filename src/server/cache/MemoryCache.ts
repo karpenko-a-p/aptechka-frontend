@@ -5,7 +5,7 @@ const lruCache = new LRUCache({
   allowStale: false, // не возвращать просроченные данные
   max: 1000, // максимальное количество элементов
   maxSize: 100 * 1024 * 1024, // 100MB максимальный размер
-  ttl: 1000 * 60 * 60, // час по умолчанию
+  ttl: 1000 * 60 * 5, // 5 минут по умолчанию
   sizeCalculation(value: unknown, key: string): number {
     // Расчет размера в байтах
     if (Buffer.isBuffer(value)) return value.length;
