@@ -1,15 +1,8 @@
 import { Category, type CategoryId } from 'server/models/Category';
 import 'server-only';
 import { Cache } from 'server/decorators';
-import { Database } from 'server/repositories/Database';
+import { Database, ICategoryEntity } from 'server/database';
 import { DistCache } from 'server/cache/DistributedCache';
-
-interface ICategoryEntity {
-  id: string;
-  name: string;
-  description: string;
-  banner: string;
-}
 
 interface ICategoryWithKeyWordsEntity extends ICategoryEntity {
   key_words: string;

@@ -1,12 +1,6 @@
 import { User, type UserId, type UserLogin, type UserPassword } from 'server/models/User';
-import { Database } from 'server/repositories/Database';
+import { Database, IUserEntity } from 'server/database';
 import { Cache } from 'server/decorators';
-
-interface IUserEntity {
-  id: number;
-  login: string;
-  password: string;
-}
 
 export abstract class UserRepository {
   static async checkUserExistsByLogin(login: UserLogin): Promise<boolean> {

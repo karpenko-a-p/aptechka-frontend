@@ -33,7 +33,7 @@ export default async function Page(): Promise<JSX.Element> {
     CategoryRepository.getCategories(),
     NewsRepository.getNewUsersDiscount(),
     NewsRepository.getNews(),
-    tokenPayload ? UserRepository.getUserById(tokenPayload.id) : Promise.resolve(null),
+    tokenPayload ? UserRepository.getUserById(tokenPayload.id) : null,
   ]);
 
   return (

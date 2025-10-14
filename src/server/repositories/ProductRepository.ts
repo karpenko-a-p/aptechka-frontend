@@ -1,15 +1,8 @@
 import { Category } from 'server/models/Category';
 import { Product } from 'server/models/Product';
 import 'server-only';
-import { Database } from 'server/repositories/Database';
+import { Database, IProductEntity } from 'server/database';
 import { Cache } from 'server/decorators';
-
-interface IProductEntity {
-  id: number;
-  name: string;
-  description: string;
-  category_id: string;
-}
 
 export abstract class ProductRepository {
   /**

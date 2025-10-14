@@ -1,14 +1,7 @@
 import { News, type NewsId } from 'server/models/News';
 import 'server-only';
-import { Database } from 'server/repositories/Database';
+import { Database, INewsEntity } from 'server/database';
 import { Cache } from 'server/decorators';
-
-interface INewsEntity {
-  id: string;
-  title: string;
-  content: string;
-  create_date: Date;
-}
 
 export abstract class NewsRepository {
   @Cache()
