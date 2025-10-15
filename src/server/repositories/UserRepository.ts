@@ -1,6 +1,7 @@
 import { User, type UserId, type UserLogin, type UserPassword } from 'server/models/User';
 import { Database, IUserEntity } from 'server/database';
 import { Cache } from 'server/decorators';
+import { DistCache } from 'server/cache';
 
 export abstract class UserRepository {
   static async checkUserExistsByLogin(login: UserLogin): Promise<boolean> {
@@ -17,9 +18,19 @@ export abstract class UserRepository {
 
   @Cache()
   static async getUserById(id: UserId): Promise<Nullable<User>> {
+    const cachedRow = await DistCache.get<IUserEntity>(`getUserById(${id})`);
+
+    if (cachedRow) {
+      return UserRepository.entityToModel(cachedRow);
+    }
+
     const query = 'SELECT id, login FROM users AS u WHERE u.id = $1;';
-    const { rows } = await Database.pool.query<Omit<IUserEntity, 'password'>>(query, [id]);
-    return rows[0] ? UserRepository.entityToModel(rows[0]) : null;
+
+    const { rows: [userEntity] } = await Database.pool.query<Omit<IUserEntity, 'password'>>(query, [id]);
+
+    await DistCache.set(`getUserById(${id})`, userEntity, DistCache.ONE_DAY);
+
+    return userEntity && UserRepository.entityToModel(userEntity);
   }
 
   static async deleteUserById(id: UserId): Promise<void> {
@@ -29,8 +40,8 @@ export abstract class UserRepository {
 
   static async getUserWithPasswordByLogin(login: UserLogin): Promise<Nullable<User>> {
     const query = 'SELECT * FROM users AS u WHERE u.login = $1;';
-    const { rows } = await Database.pool.query<IUserEntity>(query, [login]);
-    return rows[0] ? UserRepository.entityToModel(rows[0]) : null;
+    const { rows: [userEntity] } = await Database.pool.query<IUserEntity>(query, [login]);
+    return userEntity && UserRepository.entityToModel(userEntity);
   }
 
   private static entityToModel(entity: Partial<IUserEntity>): User {

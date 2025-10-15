@@ -3,6 +3,7 @@ import { Product } from 'server/models/Product';
 import 'server-only';
 import { Database, IProductEntity } from 'server/database';
 import { Cache } from 'server/decorators';
+import { DistCache } from 'server/cache';
 
 export abstract class ProductRepository {
   /**
@@ -14,11 +15,17 @@ export abstract class ProductRepository {
 
   @Cache()
   static async getProductById(id: Product['id']): Promise<Nullable<Product>> {
-    const { rows } = await ProductRepository.selectProductByIdQuery([id]);
+    const cachedRow = await DistCache.get<IProductEntity>(`getProductById(${id})`);
 
-    if (!rows[0]) return null;
+    if (cachedRow) {
+      return ProductRepository.entityToModel(cachedRow);
+    }
 
-    return ProductRepository.entityToModel(rows[0]);
+    const { rows: [productEntity] } = await ProductRepository.selectProductByIdQuery([id]);
+
+    await DistCache.setWithTags(`getProductById(${id})`, productEntity, ['products'], DistCache.ONE_HOUR);
+
+    return productEntity && ProductRepository.entityToModel(productEntity);
   }
 
   /**
@@ -30,7 +37,16 @@ export abstract class ProductRepository {
 
   @Cache()
   static async getProductsByCategoryId(id: Category['id']): Promise<Product[]> {
+    const cachedRows = await DistCache.get<IProductEntity[]>(`getProductsByCategoryId(${id})`);
+
+    if (cachedRows) {
+      return cachedRows.map(ProductRepository.entityToModel);
+    }
+
     const { rows } = await ProductRepository.selectProductByCategoryIdQuery([id]);
+
+    await DistCache.setWithTags(`getProductsByCategoryId(${id})`, rows, ['products', 'categories'], DistCache.ONE_HOUR);
+
     return rows.map(ProductRepository.entityToModel);
   }
 

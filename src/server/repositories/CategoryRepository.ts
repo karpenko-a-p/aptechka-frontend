@@ -37,7 +37,7 @@ export abstract class CategoryRepository {
 
   @Cache()
   static async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {
-    const cachedRow = await DistCache.get<ICategoryWithKeyWordsEntity>(`getCategoryById:${id}`);
+    const cachedRow = await DistCache.get<ICategoryWithKeyWordsEntity>(`getCategoryById(${id})`);
 
     if (cachedRow) {
       return CategoryRepository.entityToModel(cachedRow);
@@ -51,13 +51,11 @@ export abstract class CategoryRepository {
       GROUP BY c.id;
     `;
 
-    const { rows } = await Database.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
+    const { rows: [categoryEntity] } = await Database.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
 
-    if (!rows[0]) return null;
+    await DistCache.setWithTags(`getCategoryById(${id})`, categoryEntity, ['categories'], DistCache.ONE_HOUR);
 
-    await DistCache.setWithTags(`getCategoryById:${id}`, rows[0], ['categories'], DistCache.ONE_HOUR);
-
-    return CategoryRepository.entityToModel(rows[0]);
+    return categoryEntity && CategoryRepository.entityToModel(categoryEntity);
   }
 
   /**
