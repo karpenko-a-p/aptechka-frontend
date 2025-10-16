@@ -5,12 +5,12 @@ import {
   AUTHORIZATION_REVALIDATION_TIME
 } from 'server/constants/auth';
 import { cookies } from 'next/headers';
-import { Jwt, IJwtTokenPayload } from 'server/services/Jwt';
+import { Jwt, IJwtPayload } from 'server/services/Jwt';
 
 /**
  * Получение информации по пользователю из токена
  */
-export async function parseJwtToken(): Promise<Nullable<IJwtTokenPayload>> {
+export async function parseJwtToken(): Promise<Nullable<IJwtPayload>> {
   const cookie = await cookies();
   const jwtToken = cookie.get(AUTHORIZATION_COOKIE_NAME)?.value;
 
@@ -23,7 +23,7 @@ export async function parseJwtToken(): Promise<Nullable<IJwtTokenPayload>> {
     return null;
 
   // Обноление токена если ему осталось жить меньше 2-х дней
-  if (tokenPayload.exp <= Date.now() + AUTHORIZATION_REVALIDATION_TIME) {
+  if (tokenPayload.exp! <= Date.now() + AUTHORIZATION_REVALIDATION_TIME) {
     const jwtToken = Jwt.sign({ id: tokenPayload.id, login: tokenPayload.login });
 
     cookie.set(AUTHORIZATION_COOKIE_NAME, jwtToken, {

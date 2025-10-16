@@ -1,24 +1,24 @@
 import 'server-only';
-import { default as jwt } from 'jsonwebtoken';
+import { default as jwt, JwtPayload } from 'jsonwebtoken';
 import { AUTHORIZATION_EXPIRES } from 'server/constants/auth';
 import { Environment } from 'server/services/Environment';
 import { UserLogin, UserId } from 'server/models/User';
 
-export interface IJwtTokenPayload {
+export interface IJwtPayload extends JwtPayload {
   id: UserId;
   login: UserLogin;
-  iat: number;
-  exp: number;
-  aud: string;
-  iss: string;
 }
 
 export abstract class Jwt {
-  static getTokenPayload(token: string): IJwtTokenPayload {
-    return jwt.verify(token, Environment.JWT_SECRET) as IJwtTokenPayload;
+  static getTokenPayload(token: string): Nullable<IJwtPayload> {
+    try {
+      return jwt.verify(token, Environment.JWT_SECRET) as IJwtPayload;
+    } catch {
+      return null;
+    }
   }
 
-  static sign(payload: Pick<IJwtTokenPayload, 'id' | 'login'>): string {
+  static sign(payload: Pick<IJwtPayload, 'id' | 'login'>): string {
     return jwt.sign(payload, Environment.JWT_SECRET, {
       expiresIn: Date.now() + AUTHORIZATION_EXPIRES,
       issuer: 'Aptechka',

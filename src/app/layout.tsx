@@ -3,6 +3,9 @@ import 'client/ui/tailwindcss.css';
 import { Configurations } from 'client/components/Configurations';
 import { Inter } from 'next/font/google';
 import { type JSX } from 'react';
+import { CronJobs } from 'server/sheduler/CronJobs';
+
+CronJobs.init();
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
