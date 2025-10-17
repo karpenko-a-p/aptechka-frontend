@@ -20,6 +20,11 @@ export abstract class Environment {
   static readonly CACHE_CONNECTION_STRING = Environment.readFromEnv('CACHE_CONNECTION_STRING');
 
   /**
+   * Фаза приложения
+   */
+  static readonly NEXT_PHASE = Environment.readFromEnv('NEXT_PHASE');
+
+  /**
    * Чтение переменной окружения
    */
   private static readFromEnv(key: string): string {

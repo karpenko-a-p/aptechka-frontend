@@ -2,6 +2,8 @@ import React, { JSX } from 'react';
 import { DistributedCache } from 'server/cache/DistributedCache';
 import { Logger } from 'server/services/Logger';
 
+export const revalidate = 0;
+
 interface CacheSample {
   timestamp: string;
 }

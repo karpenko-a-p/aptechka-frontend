@@ -3,10 +3,13 @@ import { createClient } from 'redis';
 import { Environment } from 'server/services/Environment';
 import { Logger } from 'server/services/Logger';
 
-const redisClient = await createClient({ url: Environment.CACHE_CONNECTION_STRING })
+const redisClient = createClient({ url: Environment.CACHE_CONNECTION_STRING })
   .on('error', (err) => Logger.error('Redis error:', err))
-  .on('connection', () => Logger.info('New redis connection'))
-  .connect();
+  .on('connection', () => Logger.info('New redis connection'));
+
+if (Environment.NEXT_PHASE !== 'phase-production-build') {
+  await redisClient.connect();
+}
 
 export abstract class DistributedCache {
   static readonly ONE_MINUTE = DistributedCache.minutes(1);
