@@ -22,7 +22,7 @@ export abstract class Environment {
   /**
    * Фаза приложения
    */
-  static readonly NEXT_PHASE = Environment.readFromEnv('NEXT_PHASE');
+  static readonly NEXT_PHASE = process.env.NEXT_PHASE;
 
   /**
    * Чтение переменной окружения
