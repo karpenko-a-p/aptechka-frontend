@@ -6,13 +6,13 @@ import { DistCache } from 'server/cache';
 export abstract class UserRepository {
   static async checkUserExistsByLogin(login: UserLogin): Promise<boolean> {
     const query = 'SELECT 1 FROM users AS u WHERE u.login = $1;';
-    const { rowCount } = await Database.pool.query(query, [login]);
+    const { rowCount } = await Database.query(query, [login]);
     return !!rowCount;
   }
 
   static async createUser(login: UserLogin, password: UserPassword): Promise<User> {
     const query = 'INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *;';
-    const { rows } = await Database.pool.query<Omit<IUserEntity, 'password'>>(query, [login, password]);
+    const { rows } = await Database.query<Omit<IUserEntity, 'password'>>(query, [login, password]);
     return UserRepository.entityToModel(rows[0]);
   }
 
@@ -26,7 +26,7 @@ export abstract class UserRepository {
 
     const query = 'SELECT id, login FROM users AS u WHERE u.id = $1;';
 
-    const { rows: [userEntity] } = await Database.pool.query<Omit<IUserEntity, 'password'>>(query, [id]);
+    const { rows: [userEntity] } = await Database.query<Omit<IUserEntity, 'password'>>(query, [id]);
 
     await DistCache.set(`getUserById(${id})`, userEntity, DistCache.ONE_DAY);
 
@@ -35,12 +35,12 @@ export abstract class UserRepository {
 
   static async deleteUserById(id: UserId): Promise<void> {
     const query = 'DELETE FROM users AS u WHERE u.id = $1;';
-    await Database.pool.query(query, [id]);
+    await Database.query(query, [id]);
   }
 
   static async getUserWithPasswordByLogin(login: UserLogin): Promise<Nullable<User>> {
     const query = 'SELECT * FROM users AS u WHERE u.login = $1;';
-    const { rows: [userEntity] } = await Database.pool.query<IUserEntity>(query, [login]);
+    const { rows: [userEntity] } = await Database.query<IUserEntity>(query, [login]);
     return userEntity && UserRepository.entityToModel(userEntity);
   }
 

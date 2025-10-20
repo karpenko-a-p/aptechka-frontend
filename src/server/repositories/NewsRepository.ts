@@ -15,7 +15,7 @@ export abstract class NewsRepository {
 
     const query = 'SELECT id::integer, * FROM news LIMIT 5;';
 
-    const { rows } = await Database.pool.query<INewsEntity>(query);
+    const { rows } = await Database.query<INewsEntity>(query);
 
     await DistCache.setWithTags('getNews', rows, ['news'], DistCache.ONE_HOUR);
 
@@ -32,7 +32,7 @@ export abstract class NewsRepository {
 
     const query = 'SELECT * FROM news WHERE id = $1;';
 
-    const { rows: [newsEntity] } = await Database.pool.query<INewsEntity>(query, [id]);
+    const { rows: [newsEntity] } = await Database.query<INewsEntity>(query, [id]);
 
     await DistCache.setWithTags(`getNewsById(${id})`, newsEntity, ['news'], DistCache.ONE_HOUR);
 

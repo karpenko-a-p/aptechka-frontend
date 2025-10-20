@@ -51,7 +51,7 @@ export abstract class CategoryRepository {
       GROUP BY c.id;
     `;
 
-    const { rows: [categoryEntity] } = await Database.pool.query<ICategoryWithKeyWordsEntity>(query, [id]);
+    const { rows: [categoryEntity] } = await Database.query<ICategoryWithKeyWordsEntity>(query, [id]);
 
     await DistCache.setWithTags(`getCategoryById(${id})`, categoryEntity, ['categories'], DistCache.ONE_HOUR);
 

@@ -6,7 +6,12 @@ export abstract class Database {
   /**
    * Пул клиентов для работы с БД
    */
-  static readonly pool = new Pool({ connectionString: Environment.DATABASE_CONNECTION_STRING });
+  private static readonly pool = new Pool({ connectionString: Environment.DATABASE_CONNECTION_STRING });
+
+  /**
+   * Шорткат для запроса
+   */
+  static readonly query = Database.pool.query;
 
   /**
    * Оптимизация запроса
