@@ -11,7 +11,7 @@ export abstract class Database {
   /**
    * Шорткат для запроса
    */
-  static readonly query = Database.pool.query;
+  static readonly query = Database.pool.query.bind(Database.pool);
 
   /**
    * Оптимизация запроса
