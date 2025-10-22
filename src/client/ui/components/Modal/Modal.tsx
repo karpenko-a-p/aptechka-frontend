@@ -29,7 +29,7 @@ const preventPropagation = (event: React.MouseEvent<HTMLDivElement>): void => ev
 
 export const Modal: FC<ModalProps> = (props) => {
   const { children, open, className, contentClassName, onClose, ...restProps } = props;
-  const { rendered, visible } = useTransition({ state: open, time: 100 });
+  const { rendered, visible } = useTransition(open, 100);
 
   // Обрезание окна
   useEffect(() => {

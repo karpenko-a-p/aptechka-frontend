@@ -37,7 +37,7 @@ export const Tooltip: FC<TooltipProps> = (props) => {
   const componentRef = useRef<HTMLElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const { value: isOpen, setTrue: open, setFalse: close, toggle } = useBoolean();
-  const { rendered, visible } = useTransition({ state: isOpen, time: 100 });
+  const { rendered, visible } = useTransition(isOpen, 100);
   const component = Children.only(children);
 
   // Установка положения
