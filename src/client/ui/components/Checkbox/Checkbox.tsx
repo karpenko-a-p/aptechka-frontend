@@ -1,6 +1,4 @@
-'use client';
-
-import React, { FC, forwardRef, useState } from 'react';
+import React, { FC, forwardRef } from 'react';
 import { IconCheck } from '@tabler/icons-react';
 import cn from 'clsx';
 
@@ -21,40 +19,22 @@ export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
    * Обязательность
    */
   required?: boolean;
+  /**
+   * Установлен
+   */
+  checked?: boolean;
 };
 
 /**
  * Чекбокс
  */
 export const Checkbox: FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxProps>((props, ref) => {
-  const {
-    className,
-    children,
-    checked: outerChecked,
-    defaultChecked = false,
-    onChange,
-    invalid = false,
-    errorMessage,
-    disabled = false,
-    ...restProps
-  } = props;
-
-  const [innerChecked, setInnerChecked] = useState(defaultChecked);
-  const checked = outerChecked ?? innerChecked;
-  const handleChange = onChange ?? ((): void => setInnerChecked(!checked));
+  const { className, children, checked, invalid = false, errorMessage, disabled = false, ...restProps } = props;
 
   return (
     <div className={cn(className, 'checkbox')}>
       <label>
-        <input
-          type="checkbox"
-          disabled={disabled}
-          checked={checked}
-          aria-invalid={invalid}
-          onChange={handleChange}
-          ref={ref}
-          {...restProps}
-        />
+        <input type="checkbox" disabled={disabled} checked={checked} aria-invalid={invalid} ref={ref} {...restProps} />
 
         {/*Квадрат чекбокса*/}
         <div className="checkbox-rect">

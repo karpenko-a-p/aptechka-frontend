@@ -1,57 +1,57 @@
 @layer components {
-  .checkbox {
+  .radio {
     @apply flex flex-col;
   }
 
-  .checkbox > label {
+  .radio > label {
     @apply flex items-start cursor-pointer select-none text-sm text-black;
   }
 
-  .checkbox input[type="checkbox"] {
+  .radio input[type="radio"] {
     @apply hidden;
   }
 
-  .checkbox-rect {
-    @apply border-1 border-solid border-gray-200 rounded-md mr-2 transition-all overflow-hidden shadow-md
+  .radio-circle {
+    @apply border-1 border-solid border-gray-200 rounded-full mr-2 transition-all overflow-hidden shadow-md
     shadow-transparent h-[20px] w-[20px] flex-[0_0_20px];
   }
 
-  .checkbox-icon {
+  .radio-icon {
     @apply transition-all w-full h-full relative top-[50%] opacity-0 text-white;
   }
 
-  .checkbox-error {
+  .radio-error {
     @apply text-xs text-red-500 ml-[28px];
   }
 
   /*Состояние активности*/
-  .checkbox > label:has(:checked) > .checkbox-rect {
+  .radio > label:has(:checked) > .radio-circle {
     @apply bg-blue-500 shadow-blue-300 border-blue-500;
   }
 
-  .checkbox > label:has(:checked) .checkbox-icon {
+  .radio > label:has(:checked) .radio-icon {
     @apply top-0 opacity-100;
   }
 
   /*Состояние ошибки*/
-  .checkbox > label:has([aria-invalid="true"]) > .checkbox-rect {
+  .radio > label:has([aria-invalid="true"]) > .radio-circle {
     @apply border-red-500;
   }
 
-  .checkbox > label:has([aria-invalid="true"]):has(:checked) .checkbox-rect {
+  .radio > label:has([aria-invalid="true"]):has(:checked) .radio-circle {
     @apply bg-red-500 shadow-red-200;
   }
 
   /*Состояние выключено*/
-  .checkbox > label:has(:disabled) {
+  .radio > label:has(:disabled) {
     @apply cursor-not-allowed;
   }
 
-  .checkbox > label:has(:disabled) > .checkbox-rect {
+  .radio > label:has(:disabled) > .radio-circle {
     @apply border-gray-400 shadow-none;
   }
 
-  .checkbox > label:has(:checked):has(:disabled) .checkbox-rect {
+  .radio > label:has(:checked):has(:disabled) .radio-circle {
     @apply bg-gray-400;
   }
 }
