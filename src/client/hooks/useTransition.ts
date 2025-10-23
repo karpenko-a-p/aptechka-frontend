@@ -14,10 +14,11 @@ export const useTransition = (condition: boolean, duration: number): UseTransiti
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
+    const safeDelay = 10;
 
     if (condition) {
       setRendered(true);
-      timeoutId = setTimeout(() => setVisible(true));
+      timeoutId = setTimeout(() => setVisible(true), safeDelay);
     } else {
       timeoutId = setTimeout(() => setRendered(false), duration);
       setVisible(false);

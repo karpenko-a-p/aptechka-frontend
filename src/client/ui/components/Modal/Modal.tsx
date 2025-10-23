@@ -33,8 +33,8 @@ export const Modal: FC<ModalProps> = (props) => {
 
   // Обрезание окна
   useEffect(() => {
-    if (rendered) return document.body.classList.add('overflow-hidden');
-    document.body.classList.remove('overflow-hidden');
+    if (rendered) document.body.classList.add('overflow-hidden');
+    else document.body.classList.remove('overflow-hidden');
   }, [rendered]);
 
   if (!rendered || IS_SERVER) return null;
