@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import 'client/ui/tailwindcss.css';
+import 'client/ui/tailwind.css';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({

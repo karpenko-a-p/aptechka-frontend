@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import 'client/ui/tailwindcss.css';
+import 'client/ui/tailwind.css';
 import { Configurations } from 'client/components/Configurations';
 import { Inter } from 'next/font/google';
 import { type JSX } from 'react';
