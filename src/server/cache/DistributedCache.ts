@@ -11,6 +11,13 @@ if (Environment.NEXT_PHASE !== 'phase-production-build') {
   await redisClient.connect();
 }
 
+class Cached<TPayload> {
+  constructor(
+    readonly payload: TPayload,
+    readonly cached: boolean,
+  ) {}
+}
+
 export abstract class DistributedCache {
   static readonly ONE_MINUTE = DistributedCache.minutes(1);
   static readonly TEN_MINUTES = DistributedCache.minutes(10);
@@ -22,9 +29,9 @@ export abstract class DistributedCache {
   static readonly ONE_WEEK = DistributedCache.days(7);
 
   // Получить из кэша
-  static async get<TPayload>(key: string): Promise<Nilable<TPayload>> {
+  static async get<TPayload>(key: string): Promise<Cached<TPayload>> {
     const payload = await redisClient.get(key);
-    return payload ? JSON.parse(payload) : null;
+    return new Cached<TPayload>(payload && JSON.parse(payload), payload !== null);
   }
 
   // Установить в кэш
@@ -52,7 +59,7 @@ export abstract class DistributedCache {
     ttl: number,
     tags: string[],
     fabric: () => Promise<TPayload>,
-  ): Promise<TPayload> {
+  ): Promise<Cached<TPayload>> {
     const cachedValue = await DistributedCache.get<TPayload>(key);
 
     if (cachedValue) return cachedValue;
@@ -62,7 +69,7 @@ export abstract class DistributedCache {
     if (tags.length) await DistributedCache.setWithTags(key, newValue, tags, ttl);
     else await DistributedCache.set(key, newValue, ttl);
 
-    return newValue;
+    return new Cached<TPayload>(newValue, true);
   }
 
   // Инвалидация кэша

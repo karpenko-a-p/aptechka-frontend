@@ -1,5 +1,5 @@
-import { Category } from 'server/models/Category';
-import { Product } from 'server/models/Product';
+import { ICategory } from 'server/models/Category';
+import { IProduct, Product } from 'server/models/Product';
 import 'server-only';
 import { Database, IProductEntity } from 'server/database';
 import { Cache } from 'server/decorators';
@@ -14,18 +14,20 @@ export abstract class ProductRepository {
   `);
 
   @Cache()
-  static async getProductById(id: Product['id']): Promise<Nullable<Product>> {
-    const cachedRow = await DistCache.get<IProductEntity>(`getProductById(${id})`);
+  static async getProductById(id: IProduct['id']): Promise<Nullable<IProduct>> {
+    const tag = `getProductById(${id})`;
 
-    if (cachedRow) {
-      return ProductRepository.entityToModel(cachedRow);
-    }
+    const { cached, payload: cachedProduct } = await DistCache.get<Nullable<IProduct>>(tag);
 
-    const { rows: [productEntity] } = await ProductRepository.selectProductByIdQuery([id]);
+    if (cached) return cachedProduct;
 
-    await DistCache.setWithTags(`getProductById(${id})`, productEntity, ['products'], DistCache.ONE_HOUR);
+    const { rows: [productEntity = null] } = await ProductRepository.selectProductByIdQuery([id]);
 
-    return productEntity && ProductRepository.entityToModel(productEntity);
+    const product = productEntity && ProductRepository.entityToModel(productEntity);
+
+    await DistCache.setWithTags(tag, product, ['products'], DistCache.ONE_HOUR);
+
+    return product;
   }
 
   /**
@@ -36,30 +38,26 @@ export abstract class ProductRepository {
   `);
 
   @Cache()
-  static async getProductsByCategoryId(id: Category['id']): Promise<Product[]> {
-    const cachedRows = await DistCache.get<IProductEntity[]>(`getProductsByCategoryId(${id})`);
+  static async getProductsByCategoryId(id: ICategory['id']): Promise<IProduct[]> {
+    const tag = `getProductsByCategoryId(${id})`;
 
-    if (cachedRows) {
-      return cachedRows.map(ProductRepository.entityToModel);
-    }
+    const { cached, payload: cachedProducts } = await DistCache.get<IProduct[]>(tag);
+
+    if (cached) return cachedProducts;
 
     const { rows } = await ProductRepository.selectProductByCategoryIdQuery([id]);
 
-    await DistCache.setWithTags(`getProductsByCategoryId(${id})`, rows, ['products', 'categories'], DistCache.ONE_HOUR);
+    const products = rows.map(ProductRepository.entityToModel);
 
-    return rows.map(ProductRepository.entityToModel);
+    await DistCache.setWithTags(tag, rows, ['products', 'categories'], DistCache.ONE_HOUR);
+
+    return products;
   }
 
   /**
    * Маппинг сущности из БД к модели
    */
-  private static entityToModel(entity: IProductEntity): Product {
-    const product = new Product();
-    product.id = entity.id;
-    product.name = entity.name;
-    product.description = entity.description;
-    // остальные поля, но мне уже лень разрабатывать =)
-
-    return product;
+  private static entityToModel(entity: IProductEntity): IProduct {
+    return Product.new(entity.id, entity.name, entity.description, '');
   }
 }

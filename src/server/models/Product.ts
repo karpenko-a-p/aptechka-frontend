@@ -1,10 +1,16 @@
 // Poor model =)
 
-export class Product {
-  id: number = 0;
-  name: string = '';
-  description: string = '';
-  image: string = '';
-  price: number = 0;
-  count: number = 0;
+export interface IProduct {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+}
+
+export abstract class Product {
+  // Статичные поля и методы относящиеся к продукту...
+
+  static new(id = 0, name = '', description = '', image = ''): IProduct {
+    return { id, name, description, image };
+  }
 }

@@ -1,4 +1,4 @@
-import { Category, type CategoryId } from 'server/models/Category';
+import { Category, type CategoryId, ICategory } from 'server/models/Category';
 import 'server-only';
 import { Cache } from 'server/decorators';
 import { Database, ICategoryEntity } from 'server/database';
@@ -21,27 +21,27 @@ export abstract class CategoryRepository {
   `);
 
   @Cache()
-  static async getCategories(): Promise<Category[]> {
-    const cachedRows = await DistCache.get<ICategoryWithKeyWordsEntity[]>('getCategories');
+  static async getCategories(): Promise<ICategory[]> {
+    const { cached, payload: cachedCategories } = await DistCache.get<ICategory[]>(this.getCategories.name);
 
-    if (cachedRows) {
-      return cachedRows.map(CategoryRepository.entityToModel);
-    }
+    if (cached) return cachedCategories;
 
     const { rows } = await CategoryRepository.selectAllCategoriesQuery();
 
-    await DistCache.setWithTags('getCategories', rows, ['categories'], DistCache.ONE_HOUR);
+    const categories = rows.map(CategoryRepository.entityToModel);
 
-    return rows.map(CategoryRepository.entityToModel);
+    await DistCache.setWithTags(this.getCategories.name, categories, ['categories'], DistCache.ONE_HOUR);
+
+    return categories;
   }
 
   @Cache()
-  static async getCategoryById(id: CategoryId): Promise<Nullable<Category>> {
-    const cachedRow = await DistCache.get<ICategoryWithKeyWordsEntity>(`getCategoryById(${id})`);
+  static async getCategoryById(id: CategoryId): Promise<Nullable<ICategory>> {
+    const tag = `getCategoryById(${id})`;
 
-    if (cachedRow) {
-      return CategoryRepository.entityToModel(cachedRow);
-    }
+    const { cached, payload: cachedCategory } = await DistCache.get<Nullable<ICategory>>(tag);
+
+    if (cached) return cachedCategory;
 
     const query = `
       SELECT c.id, c.description, c.banner, c.name, string_agg(ckw.key_word, ',') AS key_words
@@ -51,22 +51,19 @@ export abstract class CategoryRepository {
       GROUP BY c.id;
     `;
 
-    const { rows: [categoryEntity] } = await Database.query<ICategoryWithKeyWordsEntity>(query, [id]);
+    const { rows: [categoryEntity = null] } = await Database.query<ICategoryWithKeyWordsEntity>(query, [id]);
 
-    await DistCache.setWithTags(`getCategoryById(${id})`, categoryEntity, ['categories'], DistCache.ONE_HOUR);
+    const category = categoryEntity && CategoryRepository.entityToModel(categoryEntity);
 
-    return categoryEntity && CategoryRepository.entityToModel(categoryEntity);
+    await DistCache.setWithTags(tag, category, ['categories'], DistCache.ONE_HOUR);
+
+    return category;
   }
 
   /**
    * Маппинг сущности из БД к модели
    */
-  private static entityToModel(entity: ICategoryWithKeyWordsEntity): Category {
-    return new Category()
-      .setId(entity.id)
-      .setName(entity.name)
-      .setDescription(entity.description)
-      .setBanner(entity.banner)
-      .setKeywords(entity.key_words.split(','));
+  private static entityToModel(entity: ICategoryWithKeyWordsEntity): ICategory {
+    return Category.new(entity.id, entity.name, entity.description, entity.banner, entity.key_words.split(','));
   }
 }

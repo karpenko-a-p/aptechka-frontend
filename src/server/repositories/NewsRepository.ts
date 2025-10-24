@@ -1,4 +1,4 @@
-import { News, type NewsId } from 'server/models/News';
+import { News, INews, type NewsId } from 'server/models/News';
 import 'server-only';
 import { Database, INewsEntity } from 'server/database';
 import { Cache } from 'server/decorators';
@@ -6,37 +6,39 @@ import { DistCache } from 'server/cache';
 
 export abstract class NewsRepository {
   @Cache()
-  static async getNews(): Promise<News[]> {
-    const cachedRows = await DistCache.get<INewsEntity[]>('getNews');
+  static async getNews(): Promise<INews[]> {
+    const { cached, payload: cachedNews } = await DistCache.get<INews[]>(this.getNews.name);
 
-    if (cachedRows) {
-      return cachedRows.map(NewsRepository.entityToModel);
-    }
+    if (cached) return cachedNews;
 
     const query = 'SELECT id::integer, * FROM news LIMIT 5;';
 
     const { rows } = await Database.query<INewsEntity>(query);
 
-    await DistCache.setWithTags('getNews', rows, ['news'], DistCache.ONE_HOUR);
+    const news = rows.map(NewsRepository.entityToModel);
 
-    return rows.map(NewsRepository.entityToModel);
+    await DistCache.setWithTags(this.getNews.name, news, ['news'], DistCache.ONE_HOUR);
+
+    return news;
   }
 
   @Cache()
-  static async getNewsById(id: NewsId): Promise<Nullable<News>> {
-    const cachedRow = await DistCache.get<INewsEntity>(`getNewsById(${id})`);
+  static async getNewsById(id: NewsId): Promise<Nullable<INews>> {
+    const tag = `getNewsById(${id})`;
 
-    if (cachedRow) {
-      return NewsRepository.entityToModel(cachedRow);
-    }
+    const { cached, payload: cachedNews } = await DistCache.get<Nullable<INews>>(tag);
+
+    if (cached) return cachedNews;
 
     const query = 'SELECT * FROM news WHERE id = $1;';
 
-    const { rows: [newsEntity] } = await Database.query<INewsEntity>(query, [id]);
+    const { rows: [newsEntity = null] } = await Database.query<INewsEntity>(query, [id]);
 
-    await DistCache.setWithTags(`getNewsById(${id})`, newsEntity, ['news'], DistCache.ONE_HOUR);
+    const news = newsEntity && NewsRepository.entityToModel(newsEntity);
 
-    return newsEntity && NewsRepository.entityToModel(newsEntity);
+    await DistCache.setWithTags(tag, newsEntity, ['news'], DistCache.ONE_HOUR);
+
+    return news;
   }
 
   @Cache()
@@ -47,11 +49,7 @@ export abstract class NewsRepository {
   /**
    * Маппинг сущности из БД к модели
    */
-  private static entityToModel(entity: INewsEntity): News {
-    return new News()
-      .setId(Number(entity.id))
-      .setName(entity.title)
-      .setContent(entity.content)
-      .setDate(entity.create_date);
+  private static entityToModel(entity: INewsEntity): INews {
+    return News.new(Number(entity.id), entity.title, entity.content, entity.create_date);
   }
 }

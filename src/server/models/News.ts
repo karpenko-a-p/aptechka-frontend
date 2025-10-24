@@ -5,61 +5,31 @@ export type NewsName = string;
 export type NewsContent = string;
 export type NewsDate = Date;
 
-export class News {
-  private _id: NewsId = 0;
-  private _name: NewsName = '';
-  private _content: NewsContent = '';
-  private _date: NewsDate = new Date();
+export interface INews {
+  id: NewsId;
+  name: NewsName;
+  content: NewsContent;
+  date: NewsDate;
+}
 
-  get id(): NewsId {
-    return this._id;
+export abstract class News {
+  static new(id = 0, name = '', content = '', date = new Date()): INews {
+    return { id, name, content, date };
   }
 
-  get name(): NewsName {
-    return this._name;
+  static setId(news: INews, value: Nilable<NewsId>): void {
+    if (isInteger(value)) news.id = value as NewsId;
   }
 
-  get content(): NewsContent {
-    return this._content;
+  static setName(news: INews, value: Nilable<NewsName>): void {
+    if (isString(value)) news.name = value;
   }
 
-  get date(): NewsDate {
-    return this._date;
+  static setContent(news: INews, value: Nilable<NewsContent>): void {
+    if (isString(value)) news.content = value;
   }
 
-  set id(value: Nilable<NewsId>) {
-    if (isInteger(value)) this._id = value as NewsId;
-  }
-
-  set name(value: Nilable<NewsName>) {
-    if (isString(value)) this._name = value;
-  }
-
-  set content(value: Nilable<NewsContent>) {
-    if (isString(value)) this._content = value;
-  }
-
-  set date(value: Nilable<NewsDate>) {
-    if (isDate(value)) this._date = value;
-  }
-
-  setId(value: Nilable<NewsId>): this {
-    this.id = value as NewsId;
-    return this;
-  }
-
-  setName(value: Nilable<NewsName>): this {
-    this.name = value;
-    return this;
-  }
-
-  setContent(value: Nilable<NewsContent>): this {
-    this.content = value;
-    return this;
-  }
-
-  setDate(value: Nilable<NewsDate>): this {
-    this.date = value;
-    return this;
+  static setDate(news: INews, value: Nilable<NewsDate>): void {
+    if (isDate(value)) news.date = value;
   }
 }

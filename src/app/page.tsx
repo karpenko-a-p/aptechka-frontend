@@ -41,7 +41,7 @@ export default async function Page(): Promise<JSX.Element> {
       <div className="flex items-center mb-4 gap-10 max-mobile:gap-4 justify-between">
         <h1 className="logo">Аптечка</h1>
 
-        {user ? <UserInformation user={user} /> : <UserLogin />}
+        {user ? <UserInformation {...user} /> : <UserLogin />}
       </div>
 
       <p>

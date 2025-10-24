@@ -1,56 +1,35 @@
-import { isInteger, isString } from 'lodash';
+import { isInteger, isNil, isString } from 'lodash';
 
 export type UserId = number;
 export type UserLogin = string;
 export type UserPassword = string;
 
-export class User {
+export interface IUser {
+  id: UserId;
+  login: UserLogin;
+  password: UserPassword;
+}
+
+export abstract class User {
   static readonly LOGIN_PATTERN = /^[a-zA-Z\d \-_]+$/g;
   static readonly LOGIN_MAX_LENGTH = 32;
   static readonly LOGIN_MIN_LENGTH = 6;
   static readonly PASSWORD_MAX_LENGTH = 128;
   static readonly PASSWORD_MIN_LENGTH = 6;
 
-  private _id: UserId = 0;
-  private _login: UserLogin = '';
-  private _password: UserPassword = '';
-
-  get id(): UserId {
-    return this._id;
+  static new(id = 0, login = '', password = ''): IUser {
+    return { id, login, password };
   }
 
-  get login(): UserLogin {
-    return this._login;
+  static setId(user: IUser, value: Nilable<UserId>): void {
+    if (!isNil(value) && isInteger(value)) user.id = value;
   }
 
-  get password(): UserPassword {
-    return this._password;
+  static setLogin(user: IUser, value: Nilable<UserLogin>): void {
+    if (isString(value)) user.login = value;
   }
 
-  set id(value: Nilable<UserId>) {
-    if (isInteger(value)) this._id = value as UserId;
-  }
-
-  set login(value: Nilable<UserLogin>) {
-    if (isString(value)) this._login = value;
-  }
-
-  set password(value: Nilable<UserPassword>) {
-    if (isString(value)) this._password = value;
-  }
-
-  setId(value: Nilable<UserId>): this {
-    this.id = value;
-    return this;
-  }
-
-  setLogin(value: Nilable<UserLogin>): this {
-    this.login = value;
-    return this;
-  }
-
-  setPassword(value: Nilable<UserPassword>): this {
-    this.password = value;
-    return this;
+  static setPassword(user: IUser, value: Nilable<UserPassword>): void {
+    if (isString(value)) user.password = value;
   }
 }
