@@ -17,6 +17,7 @@
 @import './components/Tooltip/Tooltip.css';
 @import './components/Progress/Progress.css';
 @import './components/Checkbox/Checkbox.css';
+@import './components/Switch/Switch.css';
 @import './components/Input/Input.css';
 @import './components/Radio/Radio.css';
 @import './components/Select/Select.css';

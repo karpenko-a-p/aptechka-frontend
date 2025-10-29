@@ -38,7 +38,7 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
  * Поле ввода
  */
 export const Input: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const { label, className, type = 'text', invalid = false, errorMessage, description, ...restProps } = props;
+  const { label, className, type = 'text', invalid, errorMessage, description, ...restProps } = props;
 
   return (
     <div className={cn(className, 'input')}>

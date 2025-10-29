@@ -40,7 +40,7 @@ export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
 };
 
 export const Select: FC<SelectProps> = forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
-  const { className, children, errorMessage, invalid = false, description, label, ...restProps } = props;
+  const { className, children, errorMessage, invalid, description, label, ...restProps } = props;
 
   return (
     <div className={cn('select', className)}>

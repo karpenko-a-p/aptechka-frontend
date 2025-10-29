@@ -1,8 +1,7 @@
 import React, { FC, forwardRef } from 'react';
-import { IconCheck } from '@tabler/icons-react';
 import cn from 'clsx';
 
-export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
+export type SwitchProps = React.InputHTMLAttributes<HTMLInputElement> & {
   /**
    * Сообщение об ошибке
    */
@@ -26,19 +25,19 @@ export type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 /**
- * Чекбокс
+ * Свич
  */
-export const Checkbox: FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxProps>((props, ref) => {
+export const Switch: FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>((props, ref) => {
   const { className, children, invalid, errorMessage, ...restProps } = props;
 
   return (
-    <div className={cn(className, 'checkbox')}>
+    <div className={cn(className, 'switch')}>
       <label>
-        <input type="checkbox" aria-invalid={invalid} ref={ref} {...restProps} />
+        <input type="checkbox" role="switch" aria-invalid={invalid} ref={ref} {...restProps} />
 
-        {/*Квадрат чекбокса*/}
-        <div className="checkbox-rect">
-          <IconCheck className="checkbox-icon" />
+        {/*Отрисовака свича*/}
+        <div className="switch-thumb">
+          <div className="switch-circle" />
         </div>
 
         {/*Наименование*/}
@@ -46,7 +45,7 @@ export const Checkbox: FC<CheckboxProps> = forwardRef<HTMLInputElement, Checkbox
       </label>
 
       {/*Текст ошибки*/}
-      {invalid && errorMessage && <p className="checkbox-error">{errorMessage}</p>}
+      {invalid && errorMessage && <p className="switch-error">{errorMessage}</p>}
     </div>
   );
 });

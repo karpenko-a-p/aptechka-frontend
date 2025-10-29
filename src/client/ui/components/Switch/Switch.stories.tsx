@@ -1,18 +1,18 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Checkbox } from './Checkbox';
+import { Switch } from './Switch';
 
-type Story = StoryObj<typeof Checkbox>;
+type Story = StoryObj<typeof Switch>;
 
-const meta: Meta<typeof Checkbox> = {
-  component: Checkbox,
+const meta: Meta<typeof Switch> = {
+  component: Switch,
 };
 
 export default meta;
 
-export const CheckboxStory: Story = {
+export const SwitchStory: Story = {
   args: {
-    children: 'I am checkbox',
+    children: 'I am switch',
   },
 };
 
@@ -31,15 +31,15 @@ export const LongText: Story = {
 
 export const Error: Story = {
   args: {
-    children: 'I am checkbox',
-    errorMessage: 'I am long error message about checkbox',
+    children: 'I am Switch',
+    errorMessage: 'I am long error message about Switch',
     invalid: true,
   },
 };
 
 export const Disabled: Story = {
   args: {
-    children: 'I am checkbox',
+    children: 'I am Switch',
     disabled: true,
     invalid: true,
   },
@@ -47,7 +47,7 @@ export const Disabled: Story = {
 
 export const DisabledChecked: Story = {
   args: {
-    children: 'I am checkbox',
+    children: 'I am Switch',
     disabled: true,
     checked: true,
   },
@@ -55,8 +55,8 @@ export const DisabledChecked: Story = {
 
 export const DisabledError: Story = {
   args: {
-    children: 'I am checkbox',
-    errorMessage: 'I am long error message about checkbox',
+    children: 'I am Switch',
+    errorMessage: 'I am long error message about Switch',
     invalid: true,
     disabled: true,
   },
@@ -91,7 +91,7 @@ export const CustomElementWithError: Story = {
         </p>
       </div>
     ),
-    errorMessage: 'I am long error message about checkbox',
+    errorMessage: 'I am long error message about Switch',
     invalid: true,
   },
 };

@@ -30,12 +30,13 @@ export type RadioProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export const Radio: FC<RadioProps> = forwardRef<HTMLInputElement, RadioProps>((props, ref) => {
-  const { className, children, checked, invalid = false, errorMessage, disabled = false, ...restProps } = props;
+  const { className, children, invalid, errorMessage, ...restProps } = props;
 
   return (
     <div className={cn('radio', className)}>
       <label>
-        <input type="radio" disabled={disabled} checked={checked} aria-invalid={invalid} ref={ref} {...restProps} />
+        {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
+        <input type="radio" aria-invalid={invalid} ref={ref} {...restProps} />
 
         {/*Кружок*/}
         <div className="radio-circle">

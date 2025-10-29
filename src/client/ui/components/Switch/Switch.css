@@ -1,0 +1,58 @@
+@layer components {
+  .switch {
+    @apply flex flex-col;
+  }
+
+  .switch > label {
+    @apply flex items-start cursor-pointer select-none text-sm text-black;
+  }
+
+  .switch input[role="switch"] {
+    @apply hidden;
+  }
+
+  .switch-thumb {
+    @apply border-1 border-solid border-gray-200 rounded-full mr-2 transition-all overflow-hidden shadow-md
+    shadow-transparent h-[20px] w-[35px] flex-[0_0_35px] p-[1px] bg-gray-200;
+  }
+
+  .switch-circle {
+    @apply transition-all w-[16px] h-[16px] border-1 border-solid border-gray-200 rounded-full text-white
+    translate-x-0 bg-white;
+  }
+
+  .switch-error {
+    @apply text-xs text-red-500 ml-[43px];
+  }
+
+  /*Состояние активности*/
+  .switch > label:has(:checked) > .switch-thumb {
+    @apply bg-blue-500 shadow-blue-300 border-blue-500;
+  }
+
+  .switch > label:has(:checked) .switch-circle {
+    @apply translate-x-[15px];
+  }
+
+  /*Состояние ошибки*/
+  .switch > label:has([aria-invalid="true"]) > .switch-thumb {
+    @apply border-red-500;
+  }
+
+  .switch > label:has([aria-invalid="true"]):has(:checked) .switch-thumb {
+    @apply bg-red-500 shadow-red-200;
+  }
+
+  /*Состояние выключено*/
+  .switch > label:has(:disabled) {
+    @apply cursor-not-allowed;
+  }
+
+  .switch > label:has(:disabled) > .switch-thumb {
+    @apply border-gray-400 bg-gray-400 shadow-none;
+  }
+
+  .switch > label:has(:checked):has(:disabled) .switch-thumb {
+    @apply bg-gray-400;
+  }
+}
