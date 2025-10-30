@@ -6,11 +6,12 @@ import {
 } from 'server/constants/auth';
 import { cookies } from 'next/headers';
 import { Jwt, IJwtPayload } from 'server/services/Jwt';
+import { cache } from 'react';
 
 /**
  * Получение информации по пользователю из токена
  */
-export async function parseJwtToken(): Promise<Nullable<IJwtPayload>> {
+export const parseJwtToken = cache(async (): Promise<Nullable<IJwtPayload>> => {
   const cookie = await cookies();
   const jwtToken = cookie.get(AUTHORIZATION_COOKIE_NAME)?.value;
 
@@ -34,4 +35,4 @@ export async function parseJwtToken(): Promise<Nullable<IJwtPayload>> {
   }
 
   return tokenPayload;
-}
+});

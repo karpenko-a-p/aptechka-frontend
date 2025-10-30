@@ -62,7 +62,7 @@ export abstract class DistributedCache {
   ): Promise<Cached<TPayload>> {
     const cachedValue = await DistributedCache.get<TPayload>(key);
 
-    if (cachedValue) return cachedValue;
+    if (cachedValue.cached) return cachedValue;
 
     const newValue = await fabric();
 

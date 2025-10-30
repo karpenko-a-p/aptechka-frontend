@@ -18,7 +18,7 @@ export abstract class Database {
    */
   static compileQuery<TRow extends QueryResultRow>(query: string) {
     const optimizedQuery = query.replaceAll(/\s{2,}/g, ' ').trim();
-    return (args?: unknown[]): Promise<QueryResult<TRow>> => Database.pool.query<TRow>(optimizedQuery, args);
+    return (args?: unknown[]): Promise<QueryResult<TRow>> => Database.query<TRow>(optimizedQuery, args);
   }
 
   /**

@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Tooltip } from './Tooltip';
+import { Tooltip, Placement } from './Tooltip';
 
 type Story = StoryObj<typeof Tooltip>;
 
@@ -10,11 +10,19 @@ const meta: Meta<typeof Tooltip> = {
 
 export default meta;
 
-const Trigger = (props: any): any => <div {...props}>Trigger</div>;
+const Trigger = (props: any): any => <span {...props}>Trigger</span>;
 
 export const TooltipStory: Story = {
   args: {
     children: <Trigger />,
-    message: 'Tooltip message'
-  }
+    message: 'Tooltip message',
+  },
+};
+
+export const PlacementStory: Story = {
+  render: () => (
+    <Tooltip message="I am message" placement={Placement.Right}>
+      <Trigger />
+    </Tooltip>
+  ),
 };
