@@ -2,16 +2,15 @@ import React, { JSX } from 'react';
 import { DistributedCache } from 'server/cache/DistributedCache';
 import { Logger } from 'server/services/Logger';
 
-export const revalidate = 0;
-
 interface CacheSample {
   timestamp: string;
 }
 
 export default async function Page(): Promise<JSX.Element> {
-  let cachedValue = await DistributedCache.get<CacheSample>('sample-value');
+  // eslint-disable-next-line prefer-const
+  let { cached, payload: cachedValue } = await DistributedCache.get<CacheSample>('sample-value');
 
-  if (!cachedValue) {
+  if (!cached) {
     cachedValue = { timestamp: new Date().toISOString() };
     await DistributedCache.set('sample-value', cachedValue, DistributedCache.ONE_MINUTE);
   }
